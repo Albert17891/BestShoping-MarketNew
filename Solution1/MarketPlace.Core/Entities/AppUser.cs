@@ -1,6 +1,8 @@
-﻿namespace MarketPlace.Core.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class AppUser
+namespace MarketPlace.Core.Entities;
+
+public class AppUser:IdentityUser
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
