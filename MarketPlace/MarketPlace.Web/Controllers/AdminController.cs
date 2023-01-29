@@ -13,16 +13,18 @@ namespace MarketPlace.Web.Controllers;
 public class AdminController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public AdminController(UserManager<AppUser> userManager)
+    public AdminController(UserManager<AppUser> userManager,RoleManager<IdentityRole> roleManager)
 	{
 		_userManager = userManager;
+		_roleManager = roleManager;
 	}
 
 	[HttpGet]
 	public async Task<IActionResult> GetUsers()
 	{
-		var users = _userManager.Users.ToListAsync();
+		var users =await _userManager.Users.ToListAsync();
 
 		if (users == null)
 			return NotFound();
@@ -30,10 +32,23 @@ public class AdminController : ControllerBase
 		return Ok(users);
 	}
 
+	
 	[HttpPost]
-	public async Task<IActionResult> UpdateRole()
+	public async Task<IActionResult> UpdateRole(string userId)
 	{
-		//Todo
-		return NotFound();
+		var user = await _userManager.FindByIdAsync(userId);
+
+		if (user == null)
+			return BadRequest();
+
+		var result=await _userManager.RemoveFromRoleAsync(user, "User");
+
+		if (result.Succeeded)
+		{
+            await _userManager.AddToRoleAsync(user, "Manager");
+			return Ok();
+        }		
+
+		return BadRequest();
 	}
 }

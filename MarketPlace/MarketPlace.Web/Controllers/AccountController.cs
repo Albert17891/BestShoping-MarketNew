@@ -42,6 +42,6 @@ public class AccountController : ControllerBase
 
         var result = await _userAuthentication.RegisterAsync(registerRequest.Adapt<Register>());
 
-        return Ok(result);
+        return Ok(JsonSerializer.Serialize(result));
     }
 }
