@@ -17,7 +17,7 @@ public class ProductServices : IProductService
     {
         cancellationToken.ThrowIfCancellationRequested();       
 
-        await _unitOfWork.ProductRepository.AddProductAsync(product);
+        await _unitOfWork.ProductRepository.AddAsync(product);
 
         await _unitOfWork.SaveChangeAsync();
 

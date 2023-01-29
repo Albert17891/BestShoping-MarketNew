@@ -1,6 +1,6 @@
 ﻿using MarketPlace.Core.Entities;
 
-namespace MarketPlace.Core.Interfaces;
+namespace MarketPlace.Core.Interfaces.Services;
 public interface IProductService
 {
     Task<IList<Product>> GetProductsAsync(CancellationToken cancellationToken);

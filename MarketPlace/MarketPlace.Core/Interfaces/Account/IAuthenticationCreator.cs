@@ -1,6 +1,8 @@
-﻿namespace MarketPlace.Core.Interfaces.Account;
+﻿using MarketPlace.Core.Entities;
+
+namespace MarketPlace.Core.Interfaces.Account;
 
 public interface IAuthenticationCreator
 {
-    string CreateToken(string userName);
+    string CreateToken(string userName,string role);
 }
