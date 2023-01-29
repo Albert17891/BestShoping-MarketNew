@@ -1,7 +1,7 @@
 ﻿using MarketPlace.Core.Entities;
-using MarketPlace.Core.Interfaces;
 using MarketPlace.Core.Interfaces.Account;
 using MarketPlace.Core.Interfaces.Repository;
+using MarketPlace.Core.Interfaces.Services;
 using MarketPlace.Core.Services;
 using MarketPlace.Infastructure.Data;
 using MarketPlace.Infastructure.Data.Account;
@@ -25,28 +25,28 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<AccessTokenConfiguration>(configuration.GetSection(nameof(AccessTokenConfiguration)));
 
-        var serviceProvider = services.BuildServiceProvider();
-        _options = serviceProvider.GetRequiredService<IOptions<AccessTokenConfiguration>>().Value;
+        //var serviceProvider = services.BuildServiceProvider();
+        //_options = serviceProvider.GetRequiredService<IOptions<AccessTokenConfiguration>>().Value;
 
-        services.AddAuthentication(options =>
-        {
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-            .AddJwtBearer(opt =>
-            {
-                opt.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidIssuer = _options.Issuer,
-                    ValidAudience = _options.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key)),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = false,
-                    ValidateIssuerSigningKey = true
-                };
-            });
+        //services.AddAuthentication(options =>
+        //{
+        //    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        //    options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
+        //})
+        //    .AddJwtBearer(opt =>
+        //    {
+        //        opt.TokenValidationParameters = new TokenValidationParameters()
+        //        {
+        //            ValidIssuer = _options.Issuer,
+        //            ValidAudience = _options.Audience,
+        //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key)),
+        //            ValidateIssuer = true,
+        //            ValidateAudience = true,
+        //            ValidateLifetime = false,
+        //            ValidateIssuerSigningKey = true
+        //        };
+        //    });
 
         services.AddScoped<IAuthenticationCreator, AuthenticationCreator>();
         services.AddScoped<IUserAuthentication, UserAuthentication>();
@@ -60,7 +60,6 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
         return services;
     }
