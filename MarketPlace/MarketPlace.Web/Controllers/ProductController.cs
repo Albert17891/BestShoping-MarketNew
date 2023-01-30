@@ -28,27 +28,7 @@ public class ProductController : ControllerBase
         var products = await _productService.GetProductsAsync(cancellationToken);
 
         return Ok(products.Adapt<IList<ProductResponse>>());
-    }
-
-    [Route("GetCardProducts")]
-    [Authorize(Roles = "User")]
-    [HttpGet]
-    public async Task<IActionResult> GetCardProducts(CancellationToken cancellationToken = default)
-    {
-        var products = await _productService.GetProductsAsync(cancellationToken);
-
-        return Ok(products.Adapt<IList<ProductResponse>>());
-    }
-
-    [Route("AddCardProducts")]
-    [Authorize(Roles = "User")]
-    [HttpPost]
-    public async Task<IActionResult> AddCardProducts(CancellationToken cancellationToken = default)
-    {
-        var products = await _productService.GetProductsAsync(cancellationToken);
-
-        return Ok(products.Adapt<IList<ProductResponse>>());
-    }
+    }   
 
 
 

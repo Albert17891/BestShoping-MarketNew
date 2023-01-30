@@ -1,4 +1,8 @@
-﻿using MarketPlace.Core.Entities;
+﻿using Mapster;
+using MarketPlace.Core.Entities;
+using MarketPlace.Core.Interfaces.Account;
+using MarketPlace.Web.ApiModels.Request;
+using MarketPlace.Web.ApiModels.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -13,30 +17,30 @@ namespace MarketPlace.Web.Controllers;
 public class AdminController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IUserAuthentication _userAuthentication;   
 
-    public AdminController(UserManager<AppUser> userManager,RoleManager<IdentityRole> roleManager)
+    public AdminController(UserManager<AppUser> userManager,IUserAuthentication userAuthentication)
 	{
 		_userManager = userManager;
-		_roleManager = roleManager;
+		_userAuthentication = userAuthentication;
 	}
 
 	[HttpGet]
 	public async Task<IActionResult> GetUsers()
 	{
-		var users =await _userManager.Users.ToListAsync();
+		var users = await _userAuthentication.GetUsers();
 
 		if (users == null)
-			return NotFound();
+			return NotFound();		
 
 		return Ok(users);
 	}
 
-	
+	[Route("update-role")]
 	[HttpPost]
-	public async Task<IActionResult> UpdateRole(string userId)
+	public async Task<IActionResult> UpdateRole(UpdateRoleRequest roleRequest)
 	{
-		var user = await _userManager.FindByIdAsync(userId);
+		var user = await _userManager.FindByEmailAsync(roleRequest.Email);
 
 		if (user == null)
 			return BadRequest();
