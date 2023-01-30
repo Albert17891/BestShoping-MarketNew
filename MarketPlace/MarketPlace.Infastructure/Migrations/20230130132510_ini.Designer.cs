@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230126150558_Ini")]
-    partial class Ini
+    [Migration("20230130132510_ini")]
+    partial class ini
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,9 +32,6 @@ namespace MarketPlace.Infastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Counter")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -71,6 +68,45 @@ namespace MarketPlace.Infastructure.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("UserProducts");
+                });
+
+            modelBuilder.Entity("MarketPlace.Core.Entities.UserProductCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserProductCard");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -313,6 +349,25 @@ namespace MarketPlace.Infastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("MarketPlace.Core.Entities.UserProductCard", b =>
+                {
+                    b.HasOne("MarketPlace.Core.Entities.Product", "Product")
+                        .WithOne("UserProductCard")
+                        .HasForeignKey("MarketPlace.Core.Entities.UserProductCard", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MarketPlace.Core.Entities.AppUser", "AppUser")
+                        .WithMany("UserProductCards")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -366,11 +421,16 @@ namespace MarketPlace.Infastructure.Migrations
 
             modelBuilder.Entity("MarketPlace.Core.Entities.Product", b =>
                 {
+                    b.Navigation("UserProductCard")
+                        .IsRequired();
+
                     b.Navigation("UsersProducts");
                 });
 
             modelBuilder.Entity("MarketPlace.Core.Entities.AppUser", b =>
                 {
+                    b.Navigation("UserProductCards");
+
                     b.Navigation("UserProducts");
                 });
 #pragma warning restore 612, 618

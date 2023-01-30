@@ -82,6 +82,9 @@ namespace MarketPlace.Infastructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -94,6 +97,9 @@ namespace MarketPlace.Infastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -342,6 +348,12 @@ namespace MarketPlace.Infastructure.Migrations
 
             modelBuilder.Entity("MarketPlace.Core.Entities.UserProductCard", b =>
                 {
+                    b.HasOne("MarketPlace.Core.Entities.Product", "Product")
+                        .WithOne("UserProductCard")
+                        .HasForeignKey("MarketPlace.Core.Entities.UserProductCard", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MarketPlace.Core.Entities.AppUser", "AppUser")
                         .WithMany("UserProductCards")
                         .HasForeignKey("UserId")
@@ -349,6 +361,8 @@ namespace MarketPlace.Infastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -404,6 +418,9 @@ namespace MarketPlace.Infastructure.Migrations
 
             modelBuilder.Entity("MarketPlace.Core.Entities.Product", b =>
                 {
+                    b.Navigation("UserProductCard")
+                        .IsRequired();
+
                     b.Navigation("UsersProducts");
                 });
 
