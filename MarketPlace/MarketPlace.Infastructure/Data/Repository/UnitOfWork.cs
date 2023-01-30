@@ -11,8 +11,10 @@ public class UnitOfWork : IUnitOfWork
     {
         _context = context;
         ProductRepository = new ProductRepository(_context);
+        CardRepository = new CardRepository(_context);
     }
     public IProductRepository ProductRepository { get; }
+    public ICardRepository CardRepository { get; }
 
     public async Task<int> SaveChangeAsync()
     {

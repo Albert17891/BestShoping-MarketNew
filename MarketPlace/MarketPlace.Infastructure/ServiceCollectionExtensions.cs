@@ -51,6 +51,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthenticationCreator, AuthenticationCreator>();
         services.AddScoped<IUserAuthentication, UserAuthentication>();
         services.AddScoped<IProductService, ProductServices>();
+        services.AddScoped<ICardService, CardService>();
 
         services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("ApplicationConnection")));
 
@@ -59,6 +60,7 @@ public static class ServiceCollectionExtensions
             .AddDefaultTokenProviders();
 
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ICardRepository, CardRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
