@@ -1,11 +1,12 @@
-﻿namespace MarketPlace.Web.ApiModels.Response;
+﻿namespace MarketPlace.Web.ApiModels.Request;
 
-public class ProductResponse
+public class CardProductUpdateRequest
 {
     public int Id { get; set; }
+    public string UserId { get; set; }
+    public int ProductId { get; set; }
     public string Name { get; set; }
     public string Type { get; set; }
     public int Quantity { get; set; }
     public double Price { get; set; }
-    public int Counter { get; set; }
 }

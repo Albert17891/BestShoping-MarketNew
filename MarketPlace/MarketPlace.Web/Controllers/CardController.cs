@@ -39,8 +39,31 @@ public class CardController : ControllerBase
         if (cardProduct is null)
             return BadRequest();
 
-
         await _cardService.AddCardProductsAsync(cardProduct.Adapt<UserProductCard>(), cancellationToken);
+
+        return Ok();
+    }
+
+    [Route("inc-update-card-products")]
+    [HttpPost]
+    public async Task<IActionResult> UpdateCardProductsIncrement(CardProductUpdateRequest cardProduct, CancellationToken cancellationToken = default)
+    {
+        if (cardProduct is null)
+            return BadRequest();
+
+        await _cardService.UpdateCardProductsIncrementAsync(cardProduct.Adapt<UserProductCard>(), cancellationToken);
+
+        return Ok();
+    }
+
+    [Route("dec-update-card-products")]
+    [HttpPost]
+    public async Task<IActionResult> UpdateCardProductsDecrement(CardProductUpdateRequest cardProduct, CancellationToken cancellationToken = default)
+    {
+        if (cardProduct is null)
+            return BadRequest();
+
+        await _cardService.UpdateCardProductsDecrementAsync(cardProduct.Adapt<UserProductCard>(), cancellationToken);
 
         return Ok();
     }
