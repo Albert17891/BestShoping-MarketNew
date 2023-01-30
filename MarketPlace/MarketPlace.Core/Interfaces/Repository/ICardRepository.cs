@@ -6,4 +6,5 @@ public interface ICardRepository
 {
     IQueryable<UserProductCard> Table { get; }
     Task AddAsync(UserProductCard userProductCard);
+    void Update(UserProductCard userProduct);
 }
