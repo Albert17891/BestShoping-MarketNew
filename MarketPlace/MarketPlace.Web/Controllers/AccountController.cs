@@ -2,7 +2,7 @@
 using MarketPlace.Core.Entities;
 using MarketPlace.Core.Interfaces.Account;
 using MarketPlace.Web.ApiModels.Request;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -12,10 +12,12 @@ namespace MarketPlace.Web.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly IUserAuthentication _userAuthentication;
+    private readonly SignInManager<AppUser> _signInManager;
 
-    public AccountController(IUserAuthentication userAuthentication)
+    public AccountController(IUserAuthentication userAuthentication, SignInManager<AppUser> signInManager)
     {
         _userAuthentication = userAuthentication;
+        _signInManager = signInManager;
     }
 
     [Route("login")]
@@ -43,5 +45,14 @@ public class AccountController : ControllerBase
         var result = await _userAuthentication.RegisterAsync(registerRequest.Adapt<Register>());
 
         return Ok(JsonSerializer.Serialize(result));
+    }
+
+    [Route("logout")]
+    [HttpGet]
+    public async Task<IActionResult> LogOut()
+    {
+        await _signInManager.SignOutAsync();
+
+        return Ok();
     }
 }
