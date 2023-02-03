@@ -36,8 +36,8 @@ public class AppDbContext : IdentityDbContext
 
         builder.Entity<UserProductCard>()
             .HasOne(x => x.Product)
-            .WithOne(x => x.UserProductCard)
-            .HasForeignKey<UserProductCard>();
+            .WithMany(x => x.UserProductCards)
+            .HasForeignKey(x=>x.ProductId);
             
 
 

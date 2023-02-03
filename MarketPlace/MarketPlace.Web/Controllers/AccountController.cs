@@ -25,12 +25,12 @@ public class AccountController : ControllerBase
         if (loginRequest is null)
             return BadRequest();
 
-        var token = await _userAuthentication.AuthenticateAsync(loginRequest.Adapt<Login>());
+        var response = await _userAuthentication.AuthenticateAsync(loginRequest.Adapt<Login>());
 
-        if (token is null)
+        if (response is null)
             return Unauthorized();
 
-        return Ok(JsonSerializer.Serialize(token));
+        return Ok(response);
     }
 
     [Route("register")]

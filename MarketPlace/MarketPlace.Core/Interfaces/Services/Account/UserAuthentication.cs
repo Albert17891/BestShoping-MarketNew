@@ -17,9 +17,9 @@ public class UserAuthentication : IUserAuthentication
         _userManager = userManager;
         _authenticationCreator = authenticationCreator;
     }
-    public async Task<string> AuthenticateAsync(Login login)
-    {
-        string token = null;
+    public async Task<LoginResponse> AuthenticateAsync(Login login)
+    {        
+        var response = new LoginResponse();
 
         var user = await _userManager.FindByNameAsync(login.UserName);
 
@@ -33,10 +33,12 @@ public class UserAuthentication : IUserAuthentication
         if (checkResult)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            token = _authenticationCreator.CreateToken(login.UserName, roles[0]);
+            response.Token = _authenticationCreator.CreateToken(login.UserName, roles[0]);
+            response.UserId = await _userManager.GetUserIdAsync(user);
+          
         }
 
-        return token;
+        return response;
     }
 
     public async Task<IList<AppUser>> GetUsers()

@@ -10,6 +10,6 @@ public class Product
     public int Quantity { get; set; }
 
     public double Price { get; set; }   
-    public UserProductCard UserProductCard { get; set; }
+    public List<UserProductCard> UserProductCards { get; set; }
     public List<UserProduct> UsersProducts { get; set; }
 }
