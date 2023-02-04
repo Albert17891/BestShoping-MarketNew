@@ -1,4 +1,6 @@
-﻿namespace MarketPlace.Core.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace MarketPlace.Core.Entities;
 
 public class UserProductCard
 {
@@ -10,6 +12,8 @@ public class UserProductCard
     public int Quantity { get; set; }
     public double Price { get; set; }
 
+    [JsonIgnore]
     public AppUser AppUser { get; set; }
+    [JsonIgnore]
     public Product Product { get; set; }
 }

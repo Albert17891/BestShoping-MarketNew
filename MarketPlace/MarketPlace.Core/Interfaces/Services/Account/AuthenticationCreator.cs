@@ -1,4 +1,4 @@
-﻿using MarketPlace.Core.Entities;
+﻿  using MarketPlace.Core.Entities;
 using MarketPlace.Core.Interfaces.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;

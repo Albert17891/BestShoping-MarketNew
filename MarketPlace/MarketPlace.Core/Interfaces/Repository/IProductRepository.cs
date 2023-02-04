@@ -8,4 +8,6 @@ public interface IProductRepository
 
     Task AddAsync(Product product);
     void Update(Product product);
+
+    void Remove(Product product);
 }

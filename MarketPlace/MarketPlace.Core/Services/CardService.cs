@@ -36,11 +36,10 @@ public class CardService : ICardService
     }
 
     public async Task<IList<UserProductCard>> GetCardProductsAsync(string userId, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
+    {     
 
         return await _unitOfWork.CardRepository.Table.Where(x => x.UserId == userId)
-                                                 .ToListAsync();
+                                                 .ToListAsync(token);
     }
 
     public async Task UpdateCardProductsDecrementAsync(UserProductCard userProduct, CancellationToken token)

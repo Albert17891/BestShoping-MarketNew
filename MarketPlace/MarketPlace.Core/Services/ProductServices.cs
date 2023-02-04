@@ -15,13 +15,30 @@ public class ProductServices : IProductService
     }
     public async Task<int> AddProductAsync(Product product, CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();       
+        cancellationToken.ThrowIfCancellationRequested();
 
         await _unitOfWork.ProductRepository.AddAsync(product);
 
         await _unitOfWork.SaveChangeAsync();
 
         return product.Id;
+    }
+
+    public async Task DeleteProductAsync(Product product, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        _unitOfWork.ProductRepository.Remove(product);
+
+        await _unitOfWork.SaveChangeAsync();
+    }
+
+    public async Task<IList<Product>> GetMyProductsAsync(string userId, CancellationToken cancellationToken)
+    {
+        var products = await _unitOfWork.ProductRepository.Table.Where(x => x.OwnerUserId == userId)
+                                                               .ToListAsync(cancellationToken);
+
+        return products;                                                          
     }
 
     public async Task<IList<Product>> GetProductsAsync(CancellationToken cancellationToken)
@@ -31,5 +48,14 @@ public class ProductServices : IProductService
         var products = await _unitOfWork.ProductRepository.Table.ToListAsync();
 
         return products;
+    }
+
+    public async Task UpdateProductAsync(Product product, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        _unitOfWork.ProductRepository.Update(product);
+
+        await _unitOfWork.SaveChangeAsync();
     }
 }
