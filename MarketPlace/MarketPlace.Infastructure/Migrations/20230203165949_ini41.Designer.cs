@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230203065604_Ini7")]
-    partial class Ini7
+    [Migration("20230203165949_ini41")]
+    partial class ini41
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,10 @@ namespace MarketPlace.Infastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

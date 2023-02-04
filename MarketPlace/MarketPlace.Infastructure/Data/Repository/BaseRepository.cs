@@ -21,8 +21,14 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         await _context.AddAsync(entity);
     }
 
+    public void Remove(T entity)
+    {
+        _context.Remove(entity);
+    }
+
     public void Update(T entity)
     {
+        //_context.Attach<T>(entity).State = EntityState.Modified;
         _context.Update(entity);
     }
 }

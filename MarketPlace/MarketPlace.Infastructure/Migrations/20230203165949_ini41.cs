@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MarketPlace.Infastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class ini : Migration
+    public partial class ini41 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -59,6 +59,7 @@ namespace MarketPlace.Infastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    OwnerUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -272,8 +273,7 @@ namespace MarketPlace.Infastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserProductCard_ProductId",
                 table: "UserProductCard",
-                column: "ProductId",
-                unique: true);
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserProductCard_UserId",
