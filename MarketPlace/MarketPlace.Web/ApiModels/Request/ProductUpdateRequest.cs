@@ -1,6 +1,6 @@
-﻿namespace MarketPlace.Web.ApiModels.Response;
+﻿namespace MarketPlace.Web.ApiModels.Request;
 
-public class ProductResponse
+public class ProductUpdateRequest
 {
     public int Id { get; set; }
     public string OwnerUserId { get; set; }
@@ -8,5 +8,4 @@ public class ProductResponse
     public string Type { get; set; }
     public int Quantity { get; set; }
     public double Price { get; set; }
-    public int Counter { get; set; }
 }

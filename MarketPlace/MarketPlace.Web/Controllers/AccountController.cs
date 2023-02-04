@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 namespace MarketPlace.Web.Controllers;
+
 [Route("[controller]")]
 [ApiController]
 public class AccountController : ControllerBase
@@ -14,10 +15,12 @@ public class AccountController : ControllerBase
     private readonly IUserAuthentication _userAuthentication;
     private readonly SignInManager<AppUser> _signInManager;
 
+
     public AccountController(IUserAuthentication userAuthentication, SignInManager<AppUser> signInManager)
     {
         _userAuthentication = userAuthentication;
         _signInManager = signInManager;
+
     }
 
     [Route("login")]
@@ -26,6 +29,8 @@ public class AccountController : ControllerBase
     {
         if (loginRequest is null)
             return BadRequest();
+
+
 
         var response = await _userAuthentication.AuthenticateAsync(loginRequest.Adapt<Login>());
 

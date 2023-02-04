@@ -24,10 +24,14 @@ public class CardController : ControllerBase
 
     [Route("get-card-products")]
     [HttpGet]
-    public async Task<IActionResult> GetCardProducts(string userId,CancellationToken cancellationToken = default)
-    {     
+    public async Task<IActionResult> GetCardProducts(CancellationToken cancellationToken = default)
+    {
 
-        var cardProduct = await _cardService.GetCardProductsAsync(userId, cancellationToken);
+        var userName = HttpContext.User.FindFirst("name").Value;
+
+        var user = await _userManager.FindByNameAsync(userName);
+
+        var cardProduct = await _cardService.GetCardProductsAsync(user.Id, cancellationToken);
 
         return Ok(cardProduct);
     }

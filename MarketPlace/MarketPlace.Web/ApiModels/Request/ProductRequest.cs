@@ -2,6 +2,7 @@
 
 public class ProductRequest
 {
+    public string OwnerUserId { get; set; }
     public string Name { get; set; }
     public string Type { get; set; }
     public int Quantity { get; set; }
