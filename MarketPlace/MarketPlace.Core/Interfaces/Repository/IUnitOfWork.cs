@@ -1,8 +1,8 @@
 ﻿namespace MarketPlace.Core.Interfaces.Repository;
 
 public interface IUnitOfWork
-{
-    IProductRepository ProductRepository { get; }
-    ICardRepository CardRepository { get; }    
+{ 
+
+    IBaseRepository<T> Repository<T>() where T:class;
     Task<int> SaveChangeAsync();
 }
