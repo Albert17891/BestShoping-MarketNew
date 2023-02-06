@@ -18,13 +18,13 @@ public class CardService : ICardService
     {
         token.ThrowIfCancellationRequested();
 
-        var product = await _unitOfWork.ProductRepository.Table.SingleOrDefaultAsync(x => x.Id == userProduct.ProductId);
+        var product = await _unitOfWork.Repository<Product>().Table.SingleOrDefaultAsync(x => x.Id == userProduct.ProductId);
 
         if (product.Quantity >= userProduct.Quantity)
         {
             product.Quantity -= userProduct.Quantity;
 
-            await _unitOfWork.CardRepository.AddAsync(userProduct);
+            await _unitOfWork.Repository<UserProductCard>().AddAsync(userProduct);
 
             await _unitOfWork.SaveChangeAsync();
         }
@@ -38,7 +38,7 @@ public class CardService : ICardService
     public async Task<IList<UserProductCard>> GetCardProductsAsync(string userId, CancellationToken token)
     {     
 
-        return await _unitOfWork.CardRepository.Table.Where(x => x.UserId == userId)
+        return await _unitOfWork.Repository<UserProductCard>().Table.Where(x => x.UserId == userId)
                                                  .ToListAsync(token);
     }
 
@@ -46,13 +46,13 @@ public class CardService : ICardService
     {
         token.ThrowIfCancellationRequested();
 
-        var product = await _unitOfWork.ProductRepository.Table.SingleOrDefaultAsync(x => x.Id == userProduct.ProductId);
+        var product = await _unitOfWork.Repository<UserProductCard>().Table.SingleOrDefaultAsync(x => x.Id == userProduct.ProductId);
 
         if (userProduct.Quantity >= 0)
         {
             product.Quantity += 1;
 
-            _unitOfWork.CardRepository.Update(userProduct);
+            _unitOfWork.Repository<UserProductCard>().Update(userProduct);
 
             await _unitOfWork.SaveChangeAsync();
         }     
@@ -63,13 +63,13 @@ public class CardService : ICardService
     {
         token.ThrowIfCancellationRequested();
 
-        var product = await _unitOfWork.ProductRepository.Table.SingleOrDefaultAsync(x => x.Id == userProduct.ProductId);
+        var product = await _unitOfWork.Repository<Product>().Table.SingleOrDefaultAsync(x => x.Id == userProduct.ProductId);
 
         if (product.Quantity >0)
         {
             product.Quantity -= 1;
 
-            _unitOfWork.CardRepository.Update(userProduct);
+            _unitOfWork.Repository<UserProductCard>().Update(userProduct);
 
             await _unitOfWork.SaveChangeAsync();
         }

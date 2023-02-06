@@ -17,7 +17,7 @@ public class ProductServices : IProductService
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        await _unitOfWork.ProductRepository.AddAsync(product);
+        await _unitOfWork.Repository<Product>().AddAsync(product);
 
         await _unitOfWork.SaveChangeAsync();
 
@@ -28,14 +28,14 @@ public class ProductServices : IProductService
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        _unitOfWork.ProductRepository.Remove(product);
+        _unitOfWork.Repository<Product>().Remove(product);
 
         await _unitOfWork.SaveChangeAsync();
     }
 
     public async Task<IList<Product>> GetMyProductsAsync(string userId, CancellationToken cancellationToken)
     {
-        var products = await _unitOfWork.ProductRepository.Table.Where(x => x.OwnerUserId == userId)
+        var products = await _unitOfWork.Repository<Product>().Table.Where(x => x.OwnerUserId == userId)
                                                                .ToListAsync(cancellationToken);
 
         return products;                                                          
@@ -45,7 +45,7 @@ public class ProductServices : IProductService
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var products = await _unitOfWork.ProductRepository.Table.ToListAsync();
+        var products = await _unitOfWork.Repository<Product>().Table.ToListAsync();
 
         return products;
     }
@@ -54,7 +54,7 @@ public class ProductServices : IProductService
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        _unitOfWork.ProductRepository.Update(product);
+        _unitOfWork.Repository<Product>().Update(product);
 
         await _unitOfWork.SaveChangeAsync();
     }
