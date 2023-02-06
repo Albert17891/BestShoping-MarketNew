@@ -2,6 +2,8 @@
 using MarketPlace.Core.Entities;
 using MarketPlace.Core.Interfaces.Account;
 using MarketPlace.Web.ApiModels.Request;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -56,8 +58,11 @@ public class AccountController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> LogOut()
     {
-        await _signInManager.SignOutAsync();
+        await HttpContext.SignOutAsync();
 
-        return Ok();
+        if(User.Identity.IsAuthenticated)
+            return Ok();
+
+        return Ok("Failed");
     }
 }

@@ -59,8 +59,7 @@ public static class ServiceCollectionExtensions
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<ICardRepository, CardRepository>();
+       
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
