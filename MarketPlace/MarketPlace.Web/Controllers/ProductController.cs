@@ -1,8 +1,10 @@
 ﻿using Mapster;
 using MarketPlace.Core.Entities;
 using MarketPlace.Core.Interfaces.Services;
+using MarketPlace.Core.Queries;
 using MarketPlace.Web.ApiModels.Request;
 using MarketPlace.Web.ApiModels.Response;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,18 +18,23 @@ public class ProductController : ControllerBase
 {
     private readonly IProductService _productService;
     private readonly UserManager<AppUser> _userManager;
+    private readonly IMediator _mediator;
 
-    public ProductController(IProductService productService, UserManager<AppUser> userManager)
+    public ProductController(IProductService productService, UserManager<AppUser> userManager,IMediator mediator)
     {
+
         _productService = productService;
         _userManager = userManager;
+        _mediator = mediator;
     }
 
     [Authorize(Roles = "User")]
     [HttpGet]
     public async Task<IActionResult> GetProducts(CancellationToken cancellationToken = default)
     {
-        var products = await _productService.GetProductsAsync(cancellationToken);
+        var query = new GetProductsQuery();
+
+        var products = await _mediator.Send(query, cancellationToken);
 
         return Ok(products.Adapt<IList<ProductResponse>>());
     }

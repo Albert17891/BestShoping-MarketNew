@@ -1,6 +1,7 @@
 using MarketPlace.Core;
 using MarketPlace.Infastructure;
 using MarketPlace.Web.Infastructure.Middleware;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -31,6 +32,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddMediatR(typeof(Program));
 
 builder.Services.AddAppServices(configuration);
 
