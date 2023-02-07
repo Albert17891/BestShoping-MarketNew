@@ -1,4 +1,5 @@
 using MarketPlace.Core;
+using MarketPlace.Core.Handlers;
 using MarketPlace.Infastructure;
 using MarketPlace.Web.Infastructure.Middleware;
 using MediatR;
@@ -33,9 +34,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddMediatR(typeof(Program));
-
 builder.Services.AddAppServices(configuration);
+
+builder.Services.AddMediatR(typeof(GetProductsHandler).Assembly);
+
 
 builder.Services.AddAuthentication(options =>
 {
