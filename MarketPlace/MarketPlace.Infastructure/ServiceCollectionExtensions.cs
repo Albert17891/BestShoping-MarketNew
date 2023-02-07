@@ -6,14 +6,10 @@ using MarketPlace.Core.Services;
 using MarketPlace.Infastructure.Data;
 using MarketPlace.Infastructure.Data.Account;
 using MarketPlace.Infastructure.Data.Repository;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace MarketPlace.Infastructure;
 
@@ -59,7 +55,7 @@ public static class ServiceCollectionExtensions
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-       
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
