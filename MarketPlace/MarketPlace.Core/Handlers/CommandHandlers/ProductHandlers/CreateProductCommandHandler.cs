@@ -4,7 +4,7 @@ using MarketPlace.Core.Entities;
 using MarketPlace.Core.Interfaces.Repository;
 using MediatR;
 
-namespace MarketPlace.Core.Handlers.CommandHandlers;
+namespace MarketPlace.Core.Handlers.CommandHandlers.ProductHandlers;
 
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
 {

@@ -21,7 +21,7 @@ public class ProductController : ControllerBase
     private readonly UserManager<AppUser> _userManager;
     private readonly IMediator _mediator;
 
-    public ProductController(IProductService productService, UserManager<AppUser> userManager,IMediator mediator)
+    public ProductController(IProductService productService, UserManager<AppUser> userManager, IMediator mediator)
     {
 
         _productService = productService;
@@ -88,14 +88,14 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Manager")]
     [Route("product-delete")]
     [HttpPost]
-    public async Task<IActionResult> ProductDelete(ProductUpdateRequest productRequest, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> ProductDelete(DeleteProductCommand command, CancellationToken cancellationToken = default)
     {
-        if (productRequest is null)
+        if (command is null)
         {
             return BadRequest();
         }
 
-        await _productService.DeleteProductAsync(productRequest.Adapt<Product>(), cancellationToken);
+        await _mediator.Send(command, cancellationToken);
 
         return Ok();
     }
