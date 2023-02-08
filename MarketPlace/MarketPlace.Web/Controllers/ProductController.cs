@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using MarketPlace.Core.Commands;
 using MarketPlace.Core.Entities;
 using MarketPlace.Core.Interfaces.Services;
 using MarketPlace.Core.Queries;
@@ -57,14 +58,14 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Manager")]
     [Route("product-add")]
     [HttpPost]
-    public async Task<IActionResult> ProductAdd(ProductRequest productRequest, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> ProductAdd(CreateProductCommand command, CancellationToken cancellationToken = default)
     {
-        if (productRequest is null)
+        if (command is null)
         {
             return BadRequest();
         }
 
-        var result = await _productService.AddProductAsync(productRequest.Adapt<Product>(), cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
 
         return Ok(result);
     }
