@@ -45,8 +45,7 @@ public static class ServiceCollectionExtensions
         //    });
 
         services.AddScoped<IAuthenticationCreator, AuthenticationCreator>();
-        services.AddScoped<IUserAuthentication, UserAuthentication>();
-        services.AddScoped<IProductService, ProductServices>();
+        services.AddScoped<IUserAuthentication, UserAuthentication>();       
         services.AddScoped<ICardService, CardService>();
 
         services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("ApplicationConnection")));

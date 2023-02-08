@@ -16,15 +16,12 @@ namespace MarketPlace.Web.Controllers;
 
 
 public class ProductController : ControllerBase
-{
-    private readonly IProductService _productService;
+{   
     private readonly UserManager<AppUser> _userManager;
     private readonly IMediator _mediator;
 
-    public ProductController(IProductService productService, UserManager<AppUser> userManager, IMediator mediator)
-    {
-
-        _productService = productService;
+    public ProductController(UserManager<AppUser> userManager, IMediator mediator)
+    {       
         _userManager = userManager;
         _mediator = mediator;
     }
@@ -73,14 +70,14 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Manager")]
     [Route("product-update")]
     [HttpPost]
-    public async Task<IActionResult> ProductUpdate(ProductUpdateRequest productRequest, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> ProductUpdate(UpdateProductCommand command, CancellationToken cancellationToken = default)
     {
-        if (productRequest is null)
+        if (command is null)
         {
             return BadRequest();
         }
 
-        await _productService.UpdateProductAsync(productRequest.Adapt<Product>(), cancellationToken);
+        await _mediator.Send(command, cancellationToken);
 
         return Ok();
     }
