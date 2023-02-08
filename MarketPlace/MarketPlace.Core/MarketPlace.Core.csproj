@@ -23,6 +23,7 @@
   <ItemGroup>
     <Folder Include="Exceptions\" />
     <Folder Include="Commands\" />
+    <Folder Include="Handlers\CommandHandlers\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
 using MarketPlace.Core;
-using MarketPlace.Core.Handlers;
+using MarketPlace.Core.Handlers.QueryHandlers;
 using MarketPlace.Infastructure;
 using MarketPlace.Web.Infastructure.Middleware;
 using MediatR;

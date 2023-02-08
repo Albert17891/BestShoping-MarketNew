@@ -4,7 +4,7 @@ using MarketPlace.Core.Queries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace MarketPlace.Core.Handlers;
+namespace MarketPlace.Core.Handlers.QueryHandlers;
 
 public class GetProductsHandler : IRequestHandler<GetProductsQuery, IList<Product>>
 {

@@ -47,7 +47,9 @@ public class ProductController : ControllerBase
         var userName = HttpContext.User.FindFirst("name").Value;
         var user = await _userManager.FindByNameAsync(userName);
 
-        var result = await _productService.GetMyProductsAsync(user.Id, cancellationToken);
+        var query = new GetMyProductQuery(user.Id);
+
+        var result = await _mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 
