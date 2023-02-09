@@ -1,5 +1,8 @@
-﻿using MarketPlace.Core.Entities;
+﻿using Mapster;
+using MarketPlace.Core.Commands;
+using MarketPlace.Core.Entities;
 using MarketPlace.Core.Exceptions;
+using MarketPlace.Core.Interfaces.Repository;
 using MarketPlace.Core.Interfaces.Services;
 using MarketPlace.Core.Queries;
 using MediatR;
@@ -12,11 +15,22 @@ public class AdminService : IAdminService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IMediator _mediator;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AdminService(UserManager<AppUser> userManager, IMediator mediator)
+    public AdminService(UserManager<AppUser> userManager, IMediator mediator,IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _mediator = mediator;
+        _unitOfWork = unitOfWork;
+    }
+
+    public async Task DeleteProductAsync(int id, CancellationToken cancellationToken)
+    {
+        var product = await _unitOfWork.Repository<Product>().Table.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+
+        var query = product.Adapt<DeleteProductCommand>();
+
+        await _mediator.Send(query, cancellationToken);
     }
 
     public async Task<bool> DeleteUserAsync(AppUser user, CancellationToken token)

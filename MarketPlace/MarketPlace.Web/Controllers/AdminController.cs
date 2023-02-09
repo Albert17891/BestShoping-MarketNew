@@ -3,6 +3,7 @@ using MarketPlace.Core.Entities;
 using MarketPlace.Core.Interfaces.Account;
 using MarketPlace.Core.Interfaces.Services;
 using MarketPlace.Web.ApiModels.Request;
+using MarketPlace.Web.ApiModels.Request.Admin;
 using MarketPlace.Web.ApiModels.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -82,5 +83,14 @@ public class AdminController : ControllerBase
         var result = await _adminService.GetProductWithOwnersAsync(cancellationToken);
 
         return Ok(result);
+    }
+
+    [Route("delete-product")]
+    [HttpPost]
+    public async Task<IActionResult> DeleteProduct(DeleteProductRequest deleteProduct,CancellationToken cancellationToken = default)
+    {
+        await _adminService.DeleteProductAsync(deleteProduct.Id, cancellationToken);
+
+        return Ok();
     }
 }
