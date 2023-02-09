@@ -3,6 +3,7 @@ using MarketPlace.Core.Entities;
 using MarketPlace.Core.Interfaces.Account;
 using MarketPlace.Core.Interfaces.Services;
 using MarketPlace.Web.ApiModels.Request;
+using MarketPlace.Web.ApiModels.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ public class AdminController : ControllerBase
         if (users == null)
             return NotFound();
 
-        return Ok(users);
+        return Ok(users.Adapt<IList<UserResponse>>());
     }
 
     [Route("update-role")]

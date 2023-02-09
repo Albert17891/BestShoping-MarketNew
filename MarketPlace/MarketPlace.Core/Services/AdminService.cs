@@ -28,7 +28,7 @@ public class AdminService : IAdminService
         if (existUser == null)
             throw new UserNotFoundException("User Not Found ");
 
-        var result = await _userManager.DeleteAsync(existUser);
+        var result = await _userManager.DeleteAsync(existUser);       
 
         return result.Succeeded;
     }
@@ -46,6 +46,7 @@ public class AdminService : IAdminService
            var filterResult=result.Where(x => x.OwnerUserId == user.Id)
                  .Select(x => new ProductWithOwner
                  {
+                     ProductId=x.Id,
                      Name = x.Name,
                      Quantity = x.Quantity,
                      Price = x.Price,

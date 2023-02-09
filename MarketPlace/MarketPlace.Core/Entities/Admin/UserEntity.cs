@@ -1,6 +1,6 @@
-﻿namespace MarketPlace.Web.ApiModels.Response;
+﻿namespace MarketPlace.Core.Entities.Admin;
 
-public class UserResponse
+public class UserEntity
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

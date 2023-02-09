@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MarketPlace.Core.Entities;
+using MarketPlace.Core.Entities.Admin;
 using MarketPlace.Core.Entities.Roles;
 using MarketPlace.Core.Interfaces.Account;
 using Microsoft.AspNetCore.Identity;
@@ -41,16 +42,26 @@ public class UserAuthentication : IUserAuthentication
         return response;
     }
 
-    public async Task<IList<AppUser>> GetUsers()
+    public async Task<IList<UserEntity>> GetUsers()
     {
         var users =await _userManager.Users.ToListAsync();
-        var usersList = new List<AppUser>();
+        var usersList = new List<UserEntity>();
 
         foreach (var user in users)
         {
-            var checkRoles =await _userManager.GetRolesAsync(user);
-            if (checkRoles[0] == "User")
-                usersList.Add(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles[0] != "Admin")
+            {
+                var userEntity = new UserEntity
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Role = roles[0]
+                };
+
+                usersList.Add(userEntity);
+            }
         }
 
         return usersList;
