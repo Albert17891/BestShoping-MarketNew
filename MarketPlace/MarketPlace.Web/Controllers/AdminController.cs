@@ -74,5 +74,12 @@ public class AdminController : ControllerBase
         return Ok(result);
     }
 
+    [Route("get-product-with-owner")]
+    [HttpGet]
+    public async Task<IActionResult> GetProductWithOwner(CancellationToken cancellationToken=default)
+    {
+        var result = await _adminService.GetProductWithOwnersAsync(cancellationToken);
 
+        return Ok(result);
+    }
 }

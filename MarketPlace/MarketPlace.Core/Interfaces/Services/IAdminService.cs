@@ -5,5 +5,5 @@ public interface IAdminService
 {
     Task<bool> UpdateUserAsync(AppUser user, CancellationToken token);
     Task<bool> DeleteUserAsync(AppUser user, CancellationToken token);
-
+    Task<IList<ProductWithOwner>> GetProductWithOwnersAsync(CancellationToken cancellationToken);
 }
