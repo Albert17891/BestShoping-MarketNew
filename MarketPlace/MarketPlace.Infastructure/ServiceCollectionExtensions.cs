@@ -56,6 +56,7 @@ public static class ServiceCollectionExtensions
 
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IAdminService, AdminService>();
 
         return services;
     }
