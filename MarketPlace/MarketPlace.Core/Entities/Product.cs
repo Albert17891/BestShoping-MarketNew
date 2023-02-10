@@ -1,4 +1,6 @@
-﻿namespace MarketPlace.Core.Entities;
+﻿using MarketPlace.Core.Entities.Admin;
+
+namespace MarketPlace.Core.Entities;
 
 public class Product
 {
@@ -12,4 +14,6 @@ public class Product
     public double Price { get; set; }   
     public List<UserProductCard> UserProductCards { get; set; }
     public List<UserProduct> UsersProducts { get; set; }
+    public List<Vaucer> Vaucers { get; set; }
+
 }
