@@ -54,6 +54,7 @@ public class UserAuthentication : IUserAuthentication
             {
                 var userEntity = new UserEntity
                 {
+                    Id=user.Id,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,

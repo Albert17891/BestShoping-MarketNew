@@ -108,10 +108,21 @@ public class AdminController : ControllerBase
     }
 
     [Route("get-vaucer")]
+    [HttpGet]
     public async Task<IActionResult> GetVaucers(CancellationToken cancellationToken=default)
     {
         var vaucers = await _adminService.GetVaucersAsync(cancellationToken);
 
         return Ok(vaucers);
+    }
+
+
+    [Route("delete-vaucer")]
+    [HttpDelete]
+    public async Task<IActionResult> DeleteVaucer(int id,CancellationToken cancellationToken)
+    {
+        await _adminService.DeleteVaucerAsync(id, cancellationToken);
+
+        return Ok();
     }
 }
