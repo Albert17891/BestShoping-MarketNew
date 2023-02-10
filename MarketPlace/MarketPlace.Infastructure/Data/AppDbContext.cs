@@ -1,4 +1,5 @@
 ﻿using MarketPlace.Core.Entities;
+using MarketPlace.Core.Entities.Admin;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ public class AppDbContext : IdentityDbContext
 
     public DbSet<Product> Products { get; set; }
     public DbSet<UserProduct> UserProducts { get; set; }
+    public DbSet<Vaucer> Vaucers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -40,13 +42,19 @@ public class AppDbContext : IdentityDbContext
             .HasForeignKey(x=>x.ProductId);
 
 
-        builder.Entity<Product>()
-            .HasKey(x => x.Id);
+        builder.Entity<Vaucer>()
+             .HasOne(x => x.AppUser)
+             .WithMany(x => x.Vaucers)
+             .HasForeignKey(x => x.UserId);
 
-        builder.Entity<Product>()
-            .Property(x => x.Id)
-            .ValueGeneratedOnAdd();
-            
+        builder.Entity<Vaucer>()
+             .HasOne(x => x.Product)
+             .WithMany(x => x.Vaucers)
+             .HasForeignKey(x => x.ProductId);
+
+        builder.Entity<Vaucer>()
+            .HasIndex(x => x.VaucerName)
+            .IsUnique();
 
         base.OnModelCreating(builder);
     }
