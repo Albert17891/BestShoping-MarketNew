@@ -26,7 +26,7 @@ public class ProductController : ControllerBase
         _mediator = mediator;
     }
 
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "Admin,User")]
     [HttpGet]
     public async Task<IActionResult> GetProducts(CancellationToken cancellationToken = default)
     {

@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MarketPlace.Core.Entities;
+using MarketPlace.Core.Entities.Admin;
 using MarketPlace.Core.Interfaces.Account;
 using MarketPlace.Core.Interfaces.Services;
 using MarketPlace.Web.ApiModels.Request;
@@ -92,5 +93,25 @@ public class AdminController : ControllerBase
         await _adminService.DeleteProductAsync(deleteProduct.Id, cancellationToken);
 
         return Ok();
+    }
+
+    [Route("create-vaucer")]
+    [HttpPost]
+    public async Task<IActionResult> CreateVaucer(VaucerRequest vaucerRequest,CancellationToken cancellationToken=default)
+    {
+        if (vaucerRequest is null)
+            return BadRequest();
+
+        await _adminService.CreateVaucerAsync(vaucerRequest.Adapt<VaucerServiceModel>(), cancellationToken);
+
+        return Ok();
+    }
+
+    [Route("get-vaucer")]
+    public async Task<IActionResult> GetVaucers(CancellationToken cancellationToken=default)
+    {
+        var vaucers = await _adminService.GetVaucersAsync(cancellationToken);
+
+        return Ok(vaucers);
     }
 }
