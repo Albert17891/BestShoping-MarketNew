@@ -13,4 +13,6 @@ public class AppUser:IdentityUser
     public List<UserProductCard> UserProductCards { get; set; }
 
     public List<Vaucer> Vaucers { get; set; }
+
+    public List<UserAccount> UserAccounts { get; set; }
 }

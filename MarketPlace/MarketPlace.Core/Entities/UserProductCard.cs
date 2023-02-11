@@ -11,6 +11,8 @@ public class UserProductCard
     public string Type { get; set; }   
     public int Quantity { get; set; }
     public double Price { get; set; }
+    public bool IsBought { get; set; } = false;
+    public bool IsActive { get; set; } = true;
 
     [JsonIgnore]
     public AppUser AppUser { get; set; }
