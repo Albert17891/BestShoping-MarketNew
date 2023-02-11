@@ -118,10 +118,10 @@ public class AdminController : ControllerBase
 
 
     [Route("delete-vaucer")]
-    [HttpDelete]
-    public async Task<IActionResult> DeleteVaucer(int id,CancellationToken cancellationToken)
+    [HttpPost]
+    public async Task<IActionResult> DeleteVaucer(DeleteVaucerRequest deleteVaucer,CancellationToken cancellationToken)
     {
-        await _adminService.DeleteVaucerAsync(id, cancellationToken);
+        await _adminService.DeleteVaucerAsync(deleteVaucer.Id, cancellationToken);
 
         return Ok();
     }
