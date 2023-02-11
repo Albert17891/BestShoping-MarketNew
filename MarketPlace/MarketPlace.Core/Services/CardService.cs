@@ -38,7 +38,7 @@ public class CardService : ICardService
     public async Task<IList<UserProductCard>> GetCardProductsAsync(string userId, CancellationToken token)
     {     
 
-        return await _unitOfWork.Repository<UserProductCard>().Table.Where(x => x.UserId == userId)
+        return await _unitOfWork.Repository<UserProductCard>().Table.Where(x => x.UserId == userId&&x.IsBought==false)
                                                  .ToListAsync(token);
     }
 

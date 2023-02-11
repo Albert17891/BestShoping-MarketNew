@@ -116,13 +116,13 @@ public class AdminService : IAdminService
         return result.Succeeded;
     }
 
-    public async Task<IList<VaucerResponse>> GetVaucersAsync(CancellationToken cancellationToken)
+    public async Task<IList<VaucerAdminResponse>> GetVaucersAsync(CancellationToken cancellationToken)
     {
         var vaucers = await _unitOfWork.Repository<Vaucer>().Table
             .Include(x => x.AppUser)
             .Include(x => x.Product)
             .Select(
-               x => new VaucerResponse { Id = x.Id, ExpireTime = x.ExpireTime, UserName = x.AppUser.UserName, ProductName = x.Product.Name })
+               x => new VaucerAdminResponse { Id = x.Id, ExpireTime = x.ExpireTime, UserName = x.AppUser.UserName, ProductName = x.Product.Name })
             .ToListAsync(cancellationToken);
 
         return vaucers;
