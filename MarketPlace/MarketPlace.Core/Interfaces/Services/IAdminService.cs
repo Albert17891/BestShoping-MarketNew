@@ -12,7 +12,7 @@ public interface IAdminService
 
     Task CreateVaucerAsync(VaucerServiceModel vaucerServiceModel,CancellationToken cancellationToken);
 
-    Task<IList<VaucerResponse>> GetVaucersAsync(CancellationToken cancellationToken);
+    Task<IList<VaucerAdminResponse>> GetVaucersAsync(CancellationToken cancellationToken);
 
     Task DeleteVaucerAsync(int id, CancellationToken cancellationToken);
 }
