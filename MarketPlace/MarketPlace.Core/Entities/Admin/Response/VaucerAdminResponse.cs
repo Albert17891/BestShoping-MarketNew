@@ -1,6 +1,6 @@
 ﻿namespace MarketPlace.Core.Entities.Admin.Response;
 
-public class VaucerResponse
+public class VaucerAdminResponse
 {
     public int Id { get; set; }
     public DateTime ExpireTime { get; set; }
