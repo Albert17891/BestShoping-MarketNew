@@ -16,6 +16,8 @@ public class AppDbContext : IdentityDbContext
     public DbSet<UserProduct> UserProducts { get; set; }
     public DbSet<Vaucer> Vaucers { get; set; }
 
+    public DbSet<UserAccount> UserAccounts { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<UserProduct>()
@@ -31,6 +33,7 @@ public class AppDbContext : IdentityDbContext
             .WithMany(x => x.UserProducts)
             .HasForeignKey(x => x.UserId);
 
+        //UserProductCard Configuration
         builder.Entity<UserProductCard>()
             .HasOne(x => x.AppUser)
             .WithMany(x => x.UserProductCards)
@@ -41,7 +44,7 @@ public class AppDbContext : IdentityDbContext
             .WithMany(x => x.UserProductCards)
             .HasForeignKey(x=>x.ProductId);
 
-
+        //Vaucer Configuration
         builder.Entity<Vaucer>()
              .HasOne(x => x.AppUser)
              .WithMany(x => x.Vaucers)
@@ -55,6 +58,13 @@ public class AppDbContext : IdentityDbContext
         builder.Entity<Vaucer>()
             .HasIndex(x => x.VaucerName)
             .IsUnique();
+
+        //UserAccount Configuration
+        builder.Entity<UserAccount>()
+            .HasOne(x => x.AppUser)
+            .WithMany(x => x.UserAccounts)
+            .HasForeignKey(x => x.UserId);
+
 
         base.OnModelCreating(builder);
     }
