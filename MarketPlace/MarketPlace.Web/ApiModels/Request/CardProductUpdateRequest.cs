@@ -9,4 +9,6 @@ public class CardProductUpdateRequest
     public string Type { get; set; }
     public int Quantity { get; set; }
     public double Price { get; set; }
+    public double SumPrice { get; set; }
+
 }
