@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using MarketPlace.Core.Entities.Admin;
 using MarketPlace.Core.Entities.User;
 using MarketPlace.Core.Interfaces.Services;
 using MarketPlace.Web.ApiModels.Request.User;
@@ -52,5 +53,14 @@ public class UserController : ControllerBase
 		await _userAccountService.BuyProductAsync(buyProductRequest.Adapt<BuyProductServiceModel>(),cancellationToken);
 
 		return Ok();
+	}
+
+	[Route("use-vaucer")]
+	[HttpPost]
+	public async Task<IActionResult> UseVaucer(UseVaucerRequest vaucerRequest,CancellationToken cancellationToken)
+	{
+		var result = await _vaucerService.UseVaucerAsync(vaucerRequest.Adapt<VaucerServiceModel>(), cancellationToken);
+
+		return Ok(result);
 	}
 }
