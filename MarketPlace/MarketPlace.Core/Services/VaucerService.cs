@@ -1,5 +1,6 @@
 ﻿using MarketPlace.Core.Entities;
 using MarketPlace.Core.Entities.Admin;
+using MarketPlace.Core.Entities.Admin.Response;
 using MarketPlace.Core.Interfaces.Repository;
 using MarketPlace.Core.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
@@ -24,30 +25,31 @@ public class VaucerService : IVaucerService
         return vaucers;
     }
 
-    public async Task<bool> UseVaucerAsync(VaucerServiceModel vaucerServiceModel, CancellationToken cancellationToken)
+    public async Task<VaucerUserResponse> UseVaucerAsync(VaucerServiceModel vaucerServiceModel, CancellationToken cancellationToken)
     {
         var vaucer = await _unitOfWork.Repository<Vaucer>().Table
                            .SingleOrDefaultAsync(x => x.VaucerName == vaucerServiceModel.VaucerName && x.IsUsed == false, cancellationToken);
 
         if (vaucer is null)
-            return false;
+            return new VaucerUserResponse() {Status=false };
 
-        var result = await CheckVaucerProducts(vaucer.ProductId, vaucerServiceModel.UserId);
+        var result = await CheckVaucerProducts(vaucerServiceModel.Id, vaucerServiceModel.UserId);
 
         if (result is null)
-            return false;
+             return new VaucerUserResponse() { Status = false };
+        
 
-        result.Price -= vaucer.Price;
+        result.SumPrice -= vaucer.Price;
         vaucer.IsUsed = true;
 
         await _unitOfWork.SaveChangeAsync();
 
-        return true;
+        return new VaucerUserResponse() {Status=true,Price=vaucer.Price };
     }
 
-    private async Task<UserProductCard> CheckVaucerProducts(int productId, string userId)
+    private async Task<UserProductCard> CheckVaucerProducts(int Id, string userId)
     {
-        var product = await _unitOfWork.Repository<UserProductCard>().Table.Where(x => x.UserId == userId && x.ProductId == productId)
+        var product = await _unitOfWork.Repository<UserProductCard>().Table.Where(x => x.UserId == userId && x.Id == Id)
                                                                             .SingleOrDefaultAsync();
 
         if (product is null)

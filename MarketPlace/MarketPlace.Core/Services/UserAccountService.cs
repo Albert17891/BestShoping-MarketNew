@@ -44,7 +44,7 @@ public class UserAccountService : IUserAccountService
 
             var selleAccount = await _unitOfWork.Repository<UserAccount>().Table.FirstOrDefaultAsync(x => x.UserId == product.OwnerUserId);
 
-            var productInUserCard=await _unitOfWork.Repository<UserProductCard>().Table.FirstOrDefaultAsync(x => x.ProductId == buyProduct.ProductId);
+            var productInUserCard=await _unitOfWork.Repository<UserProductCard>().Table.FirstOrDefaultAsync(x => x.Id == buyProduct.Id);
 
             if (selleAccount is null)
                 throw new NullReferenceException("UserAccount is Not Found");
@@ -56,6 +56,7 @@ public class UserAccountService : IUserAccountService
             selleAccount.Amount += buyProduct.Price;
 
             productInUserCard.IsBought = true;
+            productInUserCard.BoughtTime = DateTime.Now;
 
             await _unitOfWork.SaveChangeAsync();
         }
