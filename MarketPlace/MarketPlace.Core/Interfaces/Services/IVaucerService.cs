@@ -4,4 +4,5 @@ namespace MarketPlace.Core.Interfaces.Services;
 public interface IVaucerService
 {
     Task<IList<Vaucer>> GetVaucersByUserIdAsync(string userId, CancellationToken cancellationToken);
+    Task<bool> UseVaucerAsync(VaucerServiceModel vaucerServiceModel, CancellationToken cancellationToken);
 }

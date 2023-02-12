@@ -122,7 +122,8 @@ public class AdminService : IAdminService
             .Include(x => x.AppUser)
             .Include(x => x.Product)
             .Select(
-               x => new VaucerAdminResponse { Id = x.Id, ExpireTime = x.ExpireTime, UserName = x.AppUser.UserName, ProductName = x.Product.Name })
+               x => new VaucerAdminResponse 
+               { Id = x.Id, ExpireTime = x.ExpireTime, UserName = x.AppUser.UserName, ProductName = x.Product.Name,IsUsed=x.IsUsed })
             .ToListAsync(cancellationToken);
 
         return vaucers;
