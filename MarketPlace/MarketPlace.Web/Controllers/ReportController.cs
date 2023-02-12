@@ -23,6 +23,15 @@ public class ReportController : ControllerBase
 	{
 		var result = await _reportService.GetTopTenProductsAsync(cancellationToken);
 
-		return Ok();
+		return Ok(result);
 	}
+
+    [Route("get-top-ten-user")]
+    [HttpGet]
+    public async Task<IActionResult> GetTopUsers(CancellationToken cancellationToken = default)
+    {
+        var result = await _reportService.GetTopTenUsersAsync(cancellationToken);
+
+        return Ok(result);
+    }
 }

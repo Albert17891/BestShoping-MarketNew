@@ -12,7 +12,6 @@ using System.Net.WebSockets;
 namespace MarketPlace.Web.Controllers;
 [Route("[controller]")]
 [ApiController]
-[Authorize(Roles ="User")]
 
 public class UserController : ControllerBase
 {
@@ -25,7 +24,8 @@ public class UserController : ControllerBase
 		_userAccountService = userAccountService;
 	}
 
-	[Route("get-user-vaucer")]
+    [Authorize(Roles = "User")]
+    [Route("get-user-vaucer")]
 	[HttpGet]
 	public async Task<IActionResult> GetUsersVaucer(string userId,CancellationToken cancellationToken)
 	{
@@ -34,6 +34,7 @@ public class UserController : ControllerBase
 		return Ok(vaucers.Adapt<IList<VaucerResponse>>());
 	}
 
+	[Authorize(Roles ="Manager,User")]
 	[Route("get-user-amount")]
 	[HttpGet]
 	public async Task<IActionResult> GetUserAmount(string userId,CancellationToken cancellationToken)
@@ -43,7 +44,8 @@ public class UserController : ControllerBase
 		return Ok(account.Adapt<UserAccountResponse>());
 	}
 
-	[Route("buy-product")]
+    [Authorize(Roles = "User")]
+    [Route("buy-product")]
 	[HttpPost]
 	public async Task<IActionResult> BuyProduct(BuyProductRequest buyProductRequest,CancellationToken cancellationToken)
 	{
@@ -55,7 +57,8 @@ public class UserController : ControllerBase
 		return Ok();
 	}
 
-	[Route("use-vaucer")]
+    [Authorize(Roles = "User")]
+    [Route("use-vaucer")]
 	[HttpPost]
 	public async Task<IActionResult> UseVaucer(UseVaucerRequest vaucerRequest,CancellationToken cancellationToken)
 	{
