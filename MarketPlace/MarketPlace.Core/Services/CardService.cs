@@ -46,7 +46,7 @@ public class CardService : ICardService
     {
         token.ThrowIfCancellationRequested();
 
-        var product = await _unitOfWork.Repository<UserProductCard>().Table.SingleOrDefaultAsync(x => x.Id == userProduct.ProductId);
+        var product = await _unitOfWork.Repository<Product>().Table.SingleOrDefaultAsync(x => x.Id == userProduct.ProductId);
 
         if (userProduct.Quantity >= 0)
         {
