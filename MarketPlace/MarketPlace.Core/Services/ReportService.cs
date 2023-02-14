@@ -43,7 +43,8 @@ public class ReportService : IReportService
                                                                         {
                                                                              Name=x.Select(x=>x.AppUser.FirstName).First(),
                                                                              MoneySum=x.Select(x=>x.SumPrice).Sum()
-                                                                         }).Take(10).ToListAsync(cancellationToken);
+                                                                         }).OrderByDescending(x=>x.MoneySum).Take(10)
+                                                                         .ToListAsync(cancellationToken);
 
         return users;
     }
