@@ -57,7 +57,7 @@ public class CardController : ControllerBase
 
         await _cardService.UpdateCardProductsIncrementAsync(cardProduct.Adapt<UserProductCard>(), cancellationToken);
 
-        return Ok();
+        return Ok(true);
     }
 
     [Route("dec-update-card-products")]

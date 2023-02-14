@@ -1,4 +1,4 @@
-using MarketPlace.Core;
+using FluentValidation.AspNetCore;
 using MarketPlace.Core.Handlers.QueryHandlers;
 using MarketPlace.Infastructure;
 using MarketPlace.Web.Infastructure.Middleware;
@@ -24,12 +24,9 @@ var logConfiguration = new ConfigurationBuilder()
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
-    
-    
-    
-
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -37,6 +34,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAppServices(configuration);
 
 builder.Services.AddMediatR(typeof(GetProductsHandler).Assembly);
+
+builder.Services.AddFluentValidation(conf =>
+{
+    conf.RegisterValidatorsFromAssemblyContaining(typeof(Program));
+
+});
 
 
 builder.Services.AddAuthentication(options =>
@@ -50,12 +53,12 @@ builder.Services.AddAuthentication(options =>
                opt.TokenValidationParameters = new TokenValidationParameters()
                {
                    ValidIssuer = "localhost",
-                   ValidAudience = "localhost",                   
+                   ValidAudience = "localhost",
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is my Secret Key Not to use in Production Time")),
                    ValidateIssuer = true,
                    ValidateAudience = true,
                    ValidateLifetime = false,
-                   ValidateIssuerSigningKey = true                  
+                   ValidateIssuerSigningKey = true
                };
            });
 
@@ -69,6 +72,7 @@ builder.Services.AddCors(opt =>
         .AllowCredentials();
     });
 });
+
 
 var app = builder.Build();
 

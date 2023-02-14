@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.5.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
     <PackageReference Include="Mapster" Version="7.3.0" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
@@ -25,6 +27,11 @@
   <ItemGroup>
     <ProjectReference Include="..\MarketPlace.Core\MarketPlace.Core.csproj" />
     <ProjectReference Include="..\MarketPlace.Infastructure\MarketPlace.Infastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ApiModels\Request\Validator\" />
+    <Folder Include="ApiModels\Request\User\Validators\" />
   </ItemGroup>
 
 </Project>
