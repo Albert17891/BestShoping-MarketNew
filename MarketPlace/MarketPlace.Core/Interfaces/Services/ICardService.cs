@@ -8,5 +8,6 @@ public interface ICardService
     Task AddCardProductsAsync(UserProductCard userProduct,CancellationToken token);
     Task UpdateCardProductsIncrementAsync(UserProductCard userProduct, CancellationToken token);
     Task UpdateCardProductsDecrementAsync(UserProductCard userProduct, CancellationToken token);
+    Task DeleteCardProductAsync(int id, CancellationToken token);
 
 }

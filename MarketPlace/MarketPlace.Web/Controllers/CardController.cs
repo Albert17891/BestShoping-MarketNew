@@ -71,4 +71,13 @@ public class CardController : ControllerBase
 
         return Ok();
     }
+
+    [Route("delete-card-product")]
+    [HttpGet]
+    public async Task<IActionResult> DeleteCardProduct(int id,CancellationToken cancellationToken=default)
+    {
+        await _cardService.DeleteCardProductAsync(id, cancellationToken);
+
+        return Ok();
+    }
 }

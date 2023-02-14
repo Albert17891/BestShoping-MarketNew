@@ -35,10 +35,22 @@ public class CardService : ICardService
 
     }
 
-    public async Task<IList<UserProductCard>> GetCardProductsAsync(string userId, CancellationToken token)
-    {     
+    public async Task DeleteCardProductAsync(int id, CancellationToken token)
+    {
+        var cardProduct = await _unitOfWork.Repository<UserProductCard>().Table.SingleOrDefaultAsync(x => x.Id == id, token);
 
-        return await _unitOfWork.Repository<UserProductCard>().Table.Where(x => x.UserId == userId&&x.IsBought==false)
+        if (cardProduct is null)
+            throw new Exception("Card Product is Not Exist");
+
+        _unitOfWork.Repository<UserProductCard>().Remove(cardProduct);
+
+        await _unitOfWork.SaveChangeAsync();
+    }
+
+    public async Task<IList<UserProductCard>> GetCardProductsAsync(string userId, CancellationToken token)
+    {
+
+        return await _unitOfWork.Repository<UserProductCard>().Table.Where(x => x.UserId == userId && x.IsBought == false)
                                                  .ToListAsync(token);
     }
 
@@ -55,7 +67,7 @@ public class CardService : ICardService
             _unitOfWork.Repository<UserProductCard>().Update(userProduct);
 
             await _unitOfWork.SaveChangeAsync();
-        }     
+        }
 
     }
 
@@ -65,7 +77,7 @@ public class CardService : ICardService
 
         var product = await _unitOfWork.Repository<Product>().Table.SingleOrDefaultAsync(x => x.Id == userProduct.ProductId);
 
-        if (product.Quantity >0)
+        if (product.Quantity > 0)
         {
             product.Quantity -= 1;
 
