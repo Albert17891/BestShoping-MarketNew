@@ -95,7 +95,6 @@ public class ProductController : ControllerBase
         await _mediator.Send(command, cancellationToken);
 
         return Ok();
-    }
-
+    }  
 
 }
