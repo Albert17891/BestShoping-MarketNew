@@ -10,7 +10,12 @@ public class Product
     public string Type { get; set; }
     public bool IsActive { get; set; } = true;
     public int Quantity { get; set; }
-    
+    public DateTime DiscountTimeStart { get; set; }
+    public DateTime DiscountTimeEnd { get; set; }
+
+    public bool IsDiscount { get; set; } = false;
+    public bool IsDiscountActive { get; set; } = false;
+    public int DiscountPercent { get; set; }
     public double Price { get; set; }   
     public List<UserProductCard> UserProductCards { get; set; }
     public List<UserProduct> UsersProducts { get; set; }
