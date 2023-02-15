@@ -65,6 +65,10 @@ public class AppDbContext : IdentityDbContext
             .WithMany(x => x.UserAccounts)
             .HasForeignKey(x => x.UserId);
 
+        builder.Entity<AppUser>()
+            .HasIndex(x => x.Email)
+            .IsUnique();
+
 
         base.OnModelCreating(builder);
     }
