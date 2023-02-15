@@ -38,9 +38,15 @@ public class CardService : ICardService
     public async Task DeleteCardProductAsync(int id, CancellationToken token)
     {
         var cardProduct = await _unitOfWork.Repository<UserProductCard>().Table.SingleOrDefaultAsync(x => x.Id == id, token);
+        var product = await _unitOfWork.Repository<Product>().Table.SingleOrDefaultAsync(x => x.Id == cardProduct.ProductId);
 
         if (cardProduct is null)
             throw new Exception("Card Product is Not Exist");
+
+        if (product is null)
+            throw new Exception("Product is Not Exist");
+
+        product.Quantity += cardProduct.Quantity;
 
         _unitOfWork.Repository<UserProductCard>().Remove(cardProduct);
 
