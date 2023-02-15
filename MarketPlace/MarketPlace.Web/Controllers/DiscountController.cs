@@ -44,10 +44,10 @@ public class DiscountController : ControllerBase
 
     [Authorize(Roles = "Manager")]
     [Route("delete-discount")]
-    [HttpPost]
-    public async Task<IActionResult> DeleteDiscount(DiscountRequest discountRequest, CancellationToken token = default)
+    [HttpGet]
+    public async Task<IActionResult> DeleteDiscount(int id, CancellationToken token = default)
     {
-       
+		await _discountService.DeleteDiscountAsync(id, token);
 
         return Ok();
     }

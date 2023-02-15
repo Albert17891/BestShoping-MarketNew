@@ -8,4 +8,6 @@ public interface IDiscountService
     Task<IList<DiscountCheckResponse>> CheckDiscountAsync(CancellationToken cancellationToken);
     Task<IList<DiscountResponseServiceModel>> GetDiscountsAsync(CancellationToken token);
     Task CreateDiscountAsync(DiscountRequestServiceModel discountRequest, CancellationToken token);
+
+    Task DeleteDiscountAsync(int id,CancellationToken token);
 }

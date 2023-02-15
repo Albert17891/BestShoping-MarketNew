@@ -66,6 +66,9 @@ public class DiscountService : IDiscountService
         if (product is null)
             throw new NullReferenceException("product is not exist");
 
+        if (discountRequest.Percent >= 100 && discountRequest.Percent <= 0)
+            throw new ArgumentException("Percent canot be less or equal zero Or more and equal 100 ");
+
         product.IsDiscount = true;
         product.DiscountTimeStart = discountRequest.StartTime;
         product.DiscountTimeEnd = discountRequest.EndTime;
@@ -87,5 +90,20 @@ public class DiscountService : IDiscountService
                                                                     .ToListAsync(token);
 
         return products;
+    }
+
+    public async Task DeleteDiscountAsync(int id,CancellationToken token)
+    {
+        var product = await _unitOfWork.Repository<Product>().Table.SingleOrDefaultAsync(x => x.Id == id);
+
+        if (product is null)
+            throw new NullReferenceException("Product is Not Exist");
+
+        product.IsDiscount = false;
+        product.IsDiscountActive = false;
+        var discount = (product.Price * product.DiscountPercent) / (100 - product.DiscountPercent);
+        product.Price += discount;
+
+        await _unitOfWork.SaveChangeAsync();
     }
 }
