@@ -42,7 +42,17 @@ public class DiscountController : ControllerBase
 		return Ok();
 	}
 
-	[AllowAnonymous]
+    [Authorize(Roles = "Manager")]
+    [Route("delete-discount")]
+    [HttpPost]
+    public async Task<IActionResult> DeleteDiscount(DiscountRequest discountRequest, CancellationToken token = default)
+    {
+       
+
+        return Ok();
+    }
+
+    [AllowAnonymous]
 	[Route("check-discounts")]
 	[HttpGet]
 	public async Task<IActionResult> CheckDiscount(CancellationToken token=default)
