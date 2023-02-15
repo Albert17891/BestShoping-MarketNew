@@ -60,6 +60,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IVaucerService, VaucerService>();
         services.AddScoped<IUserAccountService, UserAccountService>();
+        services.AddScoped<IDiscountService, DiscountService>();
 
         return services;
     }
