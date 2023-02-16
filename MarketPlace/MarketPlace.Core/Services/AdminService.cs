@@ -2,6 +2,7 @@
 using MarketPlace.Core.Commands;
 using MarketPlace.Core.Entities;
 using MarketPlace.Core.Entities.Admin;
+using MarketPlace.Core.Entities.Admin.Request;
 using MarketPlace.Core.Entities.Admin.Response;
 using MarketPlace.Core.Exceptions;
 using MarketPlace.Core.Interfaces.Repository;
@@ -19,12 +20,15 @@ public class AdminService : IAdminService
     private readonly UserManager<AppUser> _userManager;
     private readonly IMediator _mediator;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public AdminService(UserManager<AppUser> userManager, IMediator mediator, IUnitOfWork unitOfWork)
+    public AdminService(UserManager<AppUser> userManager, IMediator mediator, IUnitOfWork unitOfWork,
+        RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _mediator = mediator;
         _unitOfWork = unitOfWork;
+        _roleManager = roleManager;
     }
 
     public async Task CreateVaucerAsync(VaucerServiceModel vaucerServiceModel, CancellationToken cancellationToken)
@@ -122,8 +126,8 @@ public class AdminService : IAdminService
             .Include(x => x.AppUser)
             .Include(x => x.Product)
             .Select(
-               x => new VaucerAdminResponse 
-               { Id = x.Id, ExpireTime = x.ExpireTime, UserName = x.AppUser.UserName, ProductName = x.Product.Name,IsUsed=x.IsUsed })
+               x => new VaucerAdminResponse
+               { Id = x.Id, ExpireTime = x.ExpireTime, UserName = x.AppUser.UserName, ProductName = x.Product.Name, IsUsed = x.IsUsed })
             .ToListAsync(cancellationToken);
 
         return vaucers;
@@ -139,5 +143,20 @@ public class AdminService : IAdminService
         _unitOfWork.Repository<Vaucer>().Remove(vaucer);
 
         await _unitOfWork.SaveChangeAsync();
+    }
+
+    public async Task UpdateRoleAsync(UpdateRoleServiceRequest updateRoleModel, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.FindByEmailAsync(updateRoleModel.Email);
+
+        if (user == null)
+            throw new Exception("User Not Found");
+
+        var result = await _userManager.RemoveFromRoleAsync(user, "User");
+
+        if (result.Succeeded)
+        {
+            await _userManager.AddToRoleAsync(user, "Manager");
+        }
     }
 }

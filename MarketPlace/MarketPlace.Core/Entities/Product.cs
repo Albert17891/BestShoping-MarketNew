@@ -1,4 +1,5 @@
 ﻿using MarketPlace.Core.Entities.Admin;
+using System.Text.Json.Serialization;
 
 namespace MarketPlace.Core.Entities;
 
@@ -16,9 +17,12 @@ public class Product
     public bool IsDiscount { get; set; } = false;
     public bool IsDiscountActive { get; set; } = false;
     public int DiscountPercent { get; set; }
-    public double Price { get; set; }   
-    public List<UserProductCard> UserProductCards { get; set; }
-    public List<UserProduct> UsersProducts { get; set; }
-    public List<Vaucer> Vaucers { get; set; }
+    public double Price { get; set; }
+    [JsonIgnore]
+    public AppUser AppUser { get; set; }
+    [JsonIgnore]
+    public IList<UserProductCard> UserProductCards { get; set; }
+    [JsonIgnore]
+    public Vaucer Vaucer { get; set; }
 
 }
