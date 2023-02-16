@@ -50,7 +50,7 @@ public static class ServiceCollectionExtensions
 
         services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("ApplicationConnection")));
 
-        services.AddIdentity<AppUser, Microsoft.AspNetCore.Identity.IdentityRole>()
+        services.AddIdentity<AppUser, IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 

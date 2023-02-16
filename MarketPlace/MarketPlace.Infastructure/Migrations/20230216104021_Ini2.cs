@@ -5,22 +5,19 @@
 namespace MarketPlace.Infastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddVaucerNameProperty : Migration
+    public partial class Ini2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "VaucerName",
-                table: "Vaucers",
-                type: "nvarchar(450)",
-                nullable: false,
-                defaultValue: "");
+            migrationBuilder.DropIndex(
+                name: "IX_Vaucers_ProductId",
+                table: "Vaucers");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vaucers_VaucerName",
+                name: "IX_Vaucers_ProductId",
                 table: "Vaucers",
-                column: "VaucerName",
+                column: "ProductId",
                 unique: true);
         }
 
@@ -28,12 +25,13 @@ namespace MarketPlace.Infastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_Vaucers_VaucerName",
+                name: "IX_Vaucers_ProductId",
                 table: "Vaucers");
 
-            migrationBuilder.DropColumn(
-                name: "VaucerName",
-                table: "Vaucers");
+            migrationBuilder.CreateIndex(
+                name: "IX_Vaucers_ProductId",
+                table: "Vaucers",
+                column: "ProductId");
         }
     }
 }

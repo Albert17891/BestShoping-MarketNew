@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MarketPlace.Infastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class ini41 : Migration
+    public partial class Ini : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,24 +51,6 @@ namespace MarketPlace.Infastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OwnerUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -178,6 +160,57 @@ namespace MarketPlace.Infastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OwnerUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    DiscountTimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DiscountTimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDiscount = table.Column<bool>(type: "bit", nullable: false),
+                    IsDiscountActive = table.Column<bool>(type: "bit", nullable: false),
+                    DiscountPercent = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_AspNetUsers_OwnerUserId",
+                        column: x => x.OwnerUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserAccounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    Iban = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Currency = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserAccounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserAccounts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserProductCard",
                 columns: table => new
                 {
@@ -188,7 +221,11 @@ namespace MarketPlace.Infastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false)
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    SumPrice = table.Column<double>(type: "float", nullable: false),
+                    IsBought = table.Column<bool>(type: "bit", nullable: false),
+                    BoughtTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,31 +241,37 @@ namespace MarketPlace.Infastructure.Migrations
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserProducts",
+                name: "Vaucers",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    VaucerName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ExpireTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserProducts", x => new { x.UserId, x.ProductId });
+                    table.PrimaryKey("PK_Vaucers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserProducts_AspNetUsers_UserId",
+                        name: "FK_Vaucers_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserProducts_Products_ProductId",
+                        name: "FK_Vaucers_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
@@ -264,11 +307,28 @@ namespace MarketPlace.Infastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_Email",
+                table: "AspNetUsers",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_OwnerUserId",
+                table: "Products",
+                column: "OwnerUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAccounts_UserId",
+                table: "UserAccounts",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserProductCard_ProductId",
@@ -281,9 +341,20 @@ namespace MarketPlace.Infastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserProducts_ProductId",
-                table: "UserProducts",
+                name: "IX_Vaucers_ProductId",
+                table: "Vaucers",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vaucers_UserId",
+                table: "Vaucers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vaucers_VaucerName",
+                table: "Vaucers",
+                column: "VaucerName",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -305,19 +376,22 @@ namespace MarketPlace.Infastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "UserAccounts");
+
+            migrationBuilder.DropTable(
                 name: "UserProductCard");
 
             migrationBuilder.DropTable(
-                name: "UserProducts");
+                name: "Vaucers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "AspNetUsers");
         }
     }
 }

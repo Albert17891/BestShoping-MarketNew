@@ -1,5 +1,6 @@
 ﻿using MarketPlace.Core.Entities;
 using MarketPlace.Core.Entities.Admin;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,26 +13,17 @@ public class AppDbContext : IdentityDbContext
 
     }
 
-    public DbSet<Product> Products { get; set; }
-    public DbSet<UserProduct> UserProducts { get; set; }
+    public DbSet<Product> Products { get; set; }    
     public DbSet<Vaucer> Vaucers { get; set; }
-
+    public DbSet<IdentityUserRole<string>> IdentityUserRoles { get; set; }
     public DbSet<UserAccount> UserAccounts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<UserProduct>()
-            .HasKey(x => new { x.UserId, x.ProductId });
-
-        builder.Entity<UserProduct>()
-            .HasOne<Product>(x => x.Product)
-            .WithMany(x => x.UsersProducts)
-            .HasForeignKey(x => x.ProductId);
-
-        builder.Entity<UserProduct>()
-            .HasOne<AppUser>(x => x.AppUser)
-            .WithMany(x => x.UserProducts)
-            .HasForeignKey(x => x.UserId);
+        builder.Entity<Product>()
+             .HasOne(x => x.AppUser)
+             .WithMany(x => x.Products)
+             .HasForeignKey(x => x.OwnerUserId);
 
         //UserProductCard Configuration
         builder.Entity<UserProductCard>()
@@ -52,8 +44,8 @@ public class AppDbContext : IdentityDbContext
 
         builder.Entity<Vaucer>()
              .HasOne(x => x.Product)
-             .WithMany(x => x.Vaucers)
-             .HasForeignKey(x => x.ProductId);
+             .WithOne(x => x.Vaucer)
+             .HasForeignKey<Vaucer>(x => x.ProductId);
 
         builder.Entity<Vaucer>()
             .HasIndex(x => x.VaucerName)
@@ -67,8 +59,7 @@ public class AppDbContext : IdentityDbContext
 
         builder.Entity<AppUser>()
             .HasIndex(x => x.Email)
-            .IsUnique();
-
+            .IsUnique();       
 
         base.OnModelCreating(builder);
     }

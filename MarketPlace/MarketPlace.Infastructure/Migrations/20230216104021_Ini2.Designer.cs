@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230212104500_Add_BouthTime_Property")]
-    partial class AddBouthTimeProperty
+    [Migration("20230216104021_Ini2")]
+    partial class Ini2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,7 +55,8 @@ namespace MarketPlace.Infastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -73,7 +74,22 @@ namespace MarketPlace.Infastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DiscountPercent")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DiscountTimeEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DiscountTimeStart")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDiscount")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDiscountActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -82,7 +98,7 @@ namespace MarketPlace.Infastructure.Migrations
 
                     b.Property<string>("OwnerUserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -95,6 +111,8 @@ namespace MarketPlace.Infastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OwnerUserId");
 
                     b.ToTable("Products");
                 });
@@ -126,21 +144,6 @@ namespace MarketPlace.Infastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserAccounts");
-                });
-
-            modelBuilder.Entity("MarketPlace.Core.Entities.UserProduct", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("UserProducts");
                 });
 
             modelBuilder.Entity("MarketPlace.Core.Entities.UserProductCard", b =>
@@ -411,14 +414,18 @@ namespace MarketPlace.Infastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
                     b.HasDiscriminator().HasValue("AppUser");
                 });
 
             modelBuilder.Entity("MarketPlace.Core.Entities.Admin.Vaucer", b =>
                 {
                     b.HasOne("MarketPlace.Core.Entities.Product", "Product")
-                        .WithMany("Vaucers")
-                        .HasForeignKey("ProductId")
+                        .WithOne("Vaucer")
+                        .HasForeignKey("MarketPlace.Core.Entities.Admin.Vaucer", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -431,6 +438,17 @@ namespace MarketPlace.Infastructure.Migrations
                     b.Navigation("AppUser");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("MarketPlace.Core.Entities.Product", b =>
+                {
+                    b.HasOne("MarketPlace.Core.Entities.AppUser", "AppUser")
+                        .WithMany("Products")
+                        .HasForeignKey("OwnerUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("MarketPlace.Core.Entities.UserAccount", b =>
@@ -442,25 +460,6 @@ namespace MarketPlace.Infastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
-                });
-
-            modelBuilder.Entity("MarketPlace.Core.Entities.UserProduct", b =>
-                {
-                    b.HasOne("MarketPlace.Core.Entities.Product", "Product")
-                        .WithMany("UsersProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MarketPlace.Core.Entities.AppUser", "AppUser")
-                        .WithMany("UserProducts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("MarketPlace.Core.Entities.UserProductCard", b =>
@@ -537,18 +536,17 @@ namespace MarketPlace.Infastructure.Migrations
                 {
                     b.Navigation("UserProductCards");
 
-                    b.Navigation("UsersProducts");
-
-                    b.Navigation("Vaucers");
+                    b.Navigation("Vaucer")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MarketPlace.Core.Entities.AppUser", b =>
                 {
+                    b.Navigation("Products");
+
                     b.Navigation("UserAccounts");
 
                     b.Navigation("UserProductCards");
-
-                    b.Navigation("UserProducts");
 
                     b.Navigation("Vaucers");
                 });
