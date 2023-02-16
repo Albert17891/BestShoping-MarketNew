@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using MarketPlace.Core.Entities;
 using MarketPlace.Core.Entities.Admin;
+using MarketPlace.Core.Entities.Admin.Request;
 using MarketPlace.Core.Interfaces.Account;
 using MarketPlace.Core.Interfaces.Services;
 using MarketPlace.Web.ApiModels.Request;
@@ -19,13 +20,13 @@ public class AdminController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IUserAuthentication _userAuthentication;
-    private readonly IAdminService _adminService;
+    private readonly IAdminService _adminService;  
 
     public AdminController(UserManager<AppUser> userManager, IUserAuthentication userAuthentication, IAdminService adminService)
     {
         _userManager = userManager;
         _userAuthentication = userAuthentication;
-        _adminService = adminService;
+        _adminService = adminService;       
     }
 
     [HttpGet]
@@ -41,22 +42,14 @@ public class AdminController : ControllerBase
 
     [Route("update-role")]
     [HttpPost]
-    public async Task<IActionResult> UpdateRole(UpdateRoleRequest roleRequest)
+    public async Task<IActionResult> UpdateRole(UpdateRoleRequest roleRequest,CancellationToken cancellationToken=default)
     {
-        var user = await _userManager.FindByEmailAsync(roleRequest.Email);
+         if(roleRequest is null)
+             return BadRequest();
 
-        if (user == null)
-            return BadRequest();
+        await _adminService.UpdateRoleAsync(roleRequest.Adapt<UpdateRoleServiceRequest>(), cancellationToken);
 
-        var result = await _userManager.RemoveFromRoleAsync(user, "User");
-
-        if (result.Succeeded)
-        {
-            await _userManager.AddToRoleAsync(user, "Manager");
-            return Ok();
-        }
-
-        return BadRequest();
+        return Ok();
     }
 
     [Route("update-user")]

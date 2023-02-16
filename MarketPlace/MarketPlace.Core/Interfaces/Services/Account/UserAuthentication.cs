@@ -3,6 +3,7 @@ using MarketPlace.Core.Entities;
 using MarketPlace.Core.Entities.Admin;
 using MarketPlace.Core.Entities.Roles;
 using MarketPlace.Core.Interfaces.Account;
+using MarketPlace.Core.Interfaces.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +13,16 @@ public class UserAuthentication : IUserAuthentication
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IAuthenticationCreator _authenticationCreator;
+    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UserAuthentication(UserManager<AppUser> userManager, IAuthenticationCreator authenticationCreator)
+    public UserAuthentication(UserManager<AppUser> userManager, IAuthenticationCreator authenticationCreator,
+        RoleManager<IdentityRole> roleManager,IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _authenticationCreator = authenticationCreator;
+        _roleManager = roleManager;
+        _unitOfWork = unitOfWork;
     }
     public async Task<LoginResponse> AuthenticateAsync(Login login)
     {        
@@ -80,7 +86,7 @@ public class UserAuthentication : IUserAuthentication
         }
 
         //Add Roles
-        await _userManager.AddToRoleAsync(user, RolesEnum.User.ToString());
+        await _userManager.AddToRoleAsync(user, RolesEnum.User.ToString());      
 
         return user.Id;
     }

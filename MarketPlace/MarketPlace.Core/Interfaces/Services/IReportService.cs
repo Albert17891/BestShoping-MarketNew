@@ -6,4 +6,6 @@ public interface IReportService
 {
     Task<IList<TopProduct>> GetTopTenProductsAsync(CancellationToken cancellationToken);
     Task<IList<TopUser>> GetTopTenUsersAsync(CancellationToken cancellationToken);
+
+    Task<IList<TopSeller>> GetTopTenSellersAsync(CancellationToken cancellationToken);
 }

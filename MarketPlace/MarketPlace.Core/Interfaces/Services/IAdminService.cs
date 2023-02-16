@@ -1,5 +1,6 @@
 ﻿using MarketPlace.Core.Entities;
 using MarketPlace.Core.Entities.Admin;
+using MarketPlace.Core.Entities.Admin.Request;
 using MarketPlace.Core.Entities.Admin.Response;
 
 namespace MarketPlace.Core.Interfaces.Services;
@@ -15,4 +16,6 @@ public interface IAdminService
     Task<IList<VaucerAdminResponse>> GetVaucersAsync(CancellationToken cancellationToken);
 
     Task DeleteVaucerAsync(int id, CancellationToken cancellationToken);
+
+    Task UpdateRoleAsync(UpdateRoleServiceRequest updateRoleModel,CancellationToken cancellationToken);
 }

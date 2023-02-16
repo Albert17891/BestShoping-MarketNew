@@ -34,4 +34,15 @@ public class ReportController : ControllerBase
 
         return Ok(result);
     }
+
+    [Route("get-top-ten-seller")]
+    [HttpGet]
+    public async Task<IActionResult> GetTopSellers(CancellationToken cancellationToken = default)
+    {
+        var result = await _reportService.GetTopTenSellersAsync(cancellationToken);
+
+        return Ok(result);
+    }
+
+
 }

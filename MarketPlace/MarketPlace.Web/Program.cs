@@ -1,9 +1,12 @@
 using FluentValidation.AspNetCore;
+using MarketPlace.Core.Entities;
 using MarketPlace.Core.Handlers.QueryHandlers;
 using MarketPlace.Infastructure;
+using MarketPlace.Infastructure.Data;
 using MarketPlace.Web.Infastructure.Middleware;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
