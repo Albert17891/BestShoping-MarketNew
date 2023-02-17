@@ -58,7 +58,7 @@ public class ReportService : IReportService
                                               MoneySum = x.UserAccounts.Select(x => x.Amount).First(),
                                               ProductQantitySum = x.Products.Count(),
                                               ProductAmountSum = x.Products.Select(x => x.Price).Sum()
-                                          })
+                                          }).OrderByDescending(x=>x.MoneySum)
                                             .SingleOrDefaultAsync(cancellationToken);
 
             topSellers.Add(topSeller);
