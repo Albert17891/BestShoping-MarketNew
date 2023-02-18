@@ -43,7 +43,7 @@ public class DiscountService : IDiscountService
 
             await _unitOfWork.SaveChangeAsync();
 
-            return new DiscountCheckResponse { Message = $"Deactivate Discount Percent{product.DiscountPercent} Name {product.Name}" };
+            return new DiscountCheckResponse { Message = $"Deactivate Discount Percent {product.DiscountPercent} Name {product.Name}" };
         }
         else if (!product.IsDiscountActive && DateTime.Now > product.DiscountTimeStart)
         {
@@ -53,7 +53,7 @@ public class DiscountService : IDiscountService
 
             await _unitOfWork.SaveChangeAsync();
 
-            return new DiscountCheckResponse { Message = $"Activate Discount Percent{product.DiscountPercent} Name {product.Name}" };
+            return new DiscountCheckResponse { Message = $"Activate Discount Percent {product.DiscountPercent} Name {product.Name}" };
         }
 
         return new DiscountCheckResponse { Message = $"Not Have Any Discount " };
