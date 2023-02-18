@@ -44,5 +44,21 @@ public class ReportController : ControllerBase
         return Ok(result);
     }
 
+    [Route("get-transactions")]
+    [HttpGet]
+    public async Task<IActionResult> GetTransactions(CancellationToken cancellationToken = default)
+    {
+        var result = await _reportService.GetTransactionAsync(cancellationToken);
 
+        return Ok(result);
+    }
+
+    [Route("get-transaction-by-id")]
+    [HttpGet]
+    public async Task<IActionResult> GetTransactionsById(string userId,CancellationToken cancellationToken = default)
+    {
+        var result = await _reportService.GetTransactionByIdAsync(userId,cancellationToken);
+
+        return Ok(result);
+    }
 }
