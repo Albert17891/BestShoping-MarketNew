@@ -1,4 +1,5 @@
 ﻿using MarketPlace.Core.Entities;
+using MarketPlace.Core.Entities.Admin;
 using MarketPlace.Core.Interfaces.Repository;
 using MarketPlace.Core.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
@@ -48,9 +49,26 @@ public class CardService : ICardService
 
         product.Quantity += cardProduct.Quantity;
 
+        //CheckVaucer if it exist change IsBlocked to false
+        var vaucer= await CheckVaucerAsync(cardProduct.UserId, cardProduct.ProductId);
+
+        if(vaucer is not null)
+        {
+            vaucer.IsBlocked = false;
+        }
+
         _unitOfWork.Repository<UserProductCard>().Remove(cardProduct);
 
         await _unitOfWork.SaveChangeAsync();
+    }
+
+    private async Task<Vaucer> CheckVaucerAsync(string userId, int productId)
+    {
+        var vaucer = await _unitOfWork.Repository<Vaucer>().Table.Where(x => x.ExpireTime > DateTime.Now && x.IsBlocked == true)
+                                                                 .Where(x => x.UserId == userId && x.ProductId == productId)
+                                                                 .SingleOrDefaultAsync();
+
+        return vaucer;
     }
 
     public async Task<IList<UserProductCard>> GetCardProductsAsync(string userId, CancellationToken token)

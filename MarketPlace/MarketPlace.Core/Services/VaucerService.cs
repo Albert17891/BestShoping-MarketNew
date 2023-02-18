@@ -28,7 +28,7 @@ public class VaucerService : IVaucerService
     public async Task<VaucerUserResponse> UseVaucerAsync(VaucerServiceModel vaucerServiceModel, CancellationToken cancellationToken)
     {
         var vaucer = await _unitOfWork.Repository<Vaucer>().Table
-                           .Where(x => x.ExpireTime >= DateTime.Now)
+                           .Where(x => x.ExpireTime >= DateTime.Now&&x.IsBlocked==false)
                            .SingleOrDefaultAsync(x => x.VaucerName == vaucerServiceModel.VaucerName && x.IsUsed == false, cancellationToken);
 
         if (vaucer is null)
@@ -40,8 +40,7 @@ public class VaucerService : IVaucerService
             return new VaucerUserResponse() { Status = false };
 
 
-        //result.SumPrice -= vaucer.Price;
-        //vaucer.IsUsed = true;
+        result.SumPrice -= vaucer.Price;      
         vaucer.IsBlocked = true;
 
         await _unitOfWork.SaveChangeAsync();
@@ -51,6 +50,7 @@ public class VaucerService : IVaucerService
 
     private async Task<UserProductCard> CheckVaucerProducts(int Id, string userId)
     {
+        //Check Products if it is exist in UserProductCart 
         var product = await _unitOfWork.Repository<UserProductCard>().Table.Where(x => x.UserId == userId && x.Id == Id)
                                                                             .SingleOrDefaultAsync();
 
