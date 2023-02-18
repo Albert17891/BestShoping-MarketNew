@@ -8,4 +8,8 @@ public interface IReportService
     Task<IList<TopUser>> GetTopTenUsersAsync(CancellationToken cancellationToken);
 
     Task<IList<TopSeller>> GetTopTenSellersAsync(CancellationToken cancellationToken);
+
+    Task<IList<TransactionReport>> GetTransactionAsync(CancellationToken cancellationToken);
+    Task<IList<TransactionReport>> GetTransactionByIdAsync(string userId,CancellationToken cancellationToken);
+
 }

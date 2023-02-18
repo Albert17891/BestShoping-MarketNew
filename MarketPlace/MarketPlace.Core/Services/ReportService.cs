@@ -64,7 +64,7 @@ public class ReportService : IReportService
             topSellers.Add(topSeller);
         }
 
-        return topSellers.OrderByDescending(x=>x.MoneySum).ToList();
+        return topSellers.OrderByDescending(x => x.MoneySum).ToList();
     }
 
 
@@ -81,5 +81,38 @@ public class ReportService : IReportService
                                                                          .ToListAsync(cancellationToken);
 
         return users;
+    }
+
+    public async Task<IList<TransactionReport>> GetTransactionAsync(CancellationToken cancellationToken)
+    {
+        var transactions = await _unitOfWork.Repository<Transaction>().Table
+                                          .Include(x => x.AppUser)
+                                          .Select(x => new TransactionReport
+                                          {
+                                              TransactionOwnerName = x.AppUser.FirstName,
+                                              TransactionPrice = x.TransactionPrice,
+                                              TransactionTime = x.TransactionTime,
+                                              IsUsedVaucer = x.IsUsedVaucer,
+                                              VaucerPrice = x.VaucerPrice
+                                          }).ToListAsync(cancellationToken);
+
+        return transactions;
+    }
+
+    public async Task<IList<TransactionReport>> GetTransactionByIdAsync(string userId, CancellationToken cancellationToken)
+    {
+        var transactions = await _unitOfWork.Repository<Transaction>().Table
+                                          .Include(x => x.AppUser)
+                                          .Where(x => x.UserId == userId)
+                                          .Select(x => new TransactionReport
+                                          {
+                                              TransactionOwnerName = x.AppUser.FirstName,
+                                              TransactionPrice = x.TransactionPrice,
+                                              TransactionTime = x.TransactionTime,
+                                              IsUsedVaucer = x.IsUsedVaucer,
+                                              VaucerPrice = x.VaucerPrice
+                                          }).ToListAsync(cancellationToken);
+
+        return transactions;
     }
 }
