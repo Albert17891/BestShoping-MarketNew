@@ -9,6 +9,7 @@ public class Vaucer
     public int ProductId { get; set; }
     public DateTime ExpireTime { get; set; }
     public double Price { get; set; }
+    public bool IsBlocked { get; set; } = false;
     public bool IsUsed { get; set; } = false;
 
     public AppUser AppUser { get; set; }
