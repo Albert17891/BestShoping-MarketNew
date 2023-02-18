@@ -17,6 +17,7 @@ public class AppDbContext : IdentityDbContext
     public DbSet<Vaucer> Vaucers { get; set; }
     public DbSet<IdentityUserRole<string>> IdentityUserRoles { get; set; }
     public DbSet<UserAccount> UserAccounts { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -59,7 +60,13 @@ public class AppDbContext : IdentityDbContext
 
         builder.Entity<AppUser>()
             .HasIndex(x => x.Email)
-            .IsUnique();       
+            .IsUnique();
+
+        //Transaction Configuration
+        builder.Entity<Transaction>()
+            .HasOne(x => x.AppUser)
+            .WithMany(x => x.Transactions)
+            .HasForeignKey(x => x.UserId);
 
         base.OnModelCreating(builder);
     }

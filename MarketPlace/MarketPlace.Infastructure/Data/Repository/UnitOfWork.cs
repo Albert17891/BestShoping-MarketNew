@@ -6,16 +6,16 @@ namespace MarketPlace.Infastructure.Data.Repository;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
-    private Dictionary<Type,object> _repositories;
+    private Dictionary<Type, object> _repositories;
 
     public UnitOfWork(AppDbContext context)
     {
-        _context = context;      
-    }  
+        _context = context;
+    }
 
     public IBaseRepository<T> Repository<T>() where T : class
     {
-        if(_repositories is null)
+        if (_repositories is null)
         {
             _repositories = new Dictionary<Type, object>();
         }
