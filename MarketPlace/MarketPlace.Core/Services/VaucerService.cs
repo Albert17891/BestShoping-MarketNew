@@ -16,6 +16,20 @@ public class VaucerService : IVaucerService
         _unitOfWork = unitOfWork;
     }
 
+    public async Task<IList<VaucerShow>> GetVaucerByProductIdAsync(int productId, CancellationToken cancellationToken)
+    {
+        var vaucers = await _unitOfWork.Repository<Vaucer>().Table.Include(x=>x.AppUser).Where(x => x.ProductId == productId)
+                                                                  .Select(x=>new VaucerShow
+                                                                  {
+                                                                      UserName=x.AppUser.FirstName,
+                                                                      ExpireTime=x.ExpireTime,
+                                                                      IsUsed=x.IsUsed
+                                                                  })
+                                                                  .ToListAsync(cancellationToken);
+
+        return vaucers;
+    }
+
     public async Task<IList<Vaucer>> GetVaucersByUserIdAsync(string userId, CancellationToken cancellationToken)
     {
         var vaucers = await _unitOfWork.Repository<Vaucer>().Table

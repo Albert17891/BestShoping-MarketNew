@@ -6,4 +6,6 @@ public interface IVaucerService
 {
     Task<IList<Vaucer>> GetVaucersByUserIdAsync(string userId, CancellationToken cancellationToken);
     Task<VaucerUserResponse> UseVaucerAsync(VaucerServiceModel vaucerServiceModel, CancellationToken cancellationToken);
+
+    Task<IList<VaucerShow>> GetVaucerByProductIdAsync(int productId, CancellationToken cancellationToken);
 }

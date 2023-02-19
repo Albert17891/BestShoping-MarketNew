@@ -41,11 +41,11 @@ public class ReportService : IReportService
 
         var users = await _unitOfWork.Repository<IdentityUserRole<string>>().Table.Where(x => x.RoleId == roles.Id).ToListAsync();
 
-
+       
         var topSellers = new List<TopSeller>();
 
         foreach (var user in users)
-        {
+        {       
             var topSeller = await _unitOfWork.Repository<AppUser>()
                                           .Table
                                            .Include(x => x.Products)
@@ -57,7 +57,7 @@ public class ReportService : IReportService
                                               Name = x.FirstName,
                                               MoneySum = x.UserAccounts.Select(x => x.Amount).First(),
                                               ProductQantitySum = x.Products.Count(),
-                                              ProductAmountSum = x.Products.Select(x => x.Price).Sum()
+                                              ProductAmountSum = x.Products.Select(x => x.Price).Sum()                                            
                                           })
                                             .SingleOrDefaultAsync(cancellationToken);
 
