@@ -20,13 +20,14 @@ public class AdminController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IUserAuthentication _userAuthentication;
-    private readonly IAdminService _adminService;  
+    private readonly IAdminService _adminService;
+
 
     public AdminController(UserManager<AppUser> userManager, IUserAuthentication userAuthentication, IAdminService adminService)
     {
         _userManager = userManager;
         _userAuthentication = userAuthentication;
-        _adminService = adminService;       
+        _adminService = adminService;
     }
 
     [HttpGet]
@@ -42,10 +43,10 @@ public class AdminController : ControllerBase
 
     [Route("update-role")]
     [HttpPost]
-    public async Task<IActionResult> UpdateRole(UpdateRoleRequest roleRequest,CancellationToken cancellationToken=default)
+    public async Task<IActionResult> UpdateRole(UpdateRoleRequest roleRequest, CancellationToken cancellationToken = default)
     {
-         if(roleRequest is null)
-             return BadRequest();
+        if (roleRequest is null)
+            return BadRequest();
 
         await _adminService.UpdateRoleAsync(roleRequest.Adapt<UpdateRoleServiceRequest>(), cancellationToken);
 
@@ -72,7 +73,7 @@ public class AdminController : ControllerBase
 
     [Route("get-product-with-owner")]
     [HttpGet]
-    public async Task<IActionResult> GetProductWithOwner(CancellationToken cancellationToken=default)
+    public async Task<IActionResult> GetProductWithOwner(CancellationToken cancellationToken = default)
     {
         var result = await _adminService.GetProductWithOwnersAsync(cancellationToken);
 
@@ -81,7 +82,7 @@ public class AdminController : ControllerBase
 
     [Route("delete-product")]
     [HttpPost]
-    public async Task<IActionResult> DeleteProduct(DeleteProductRequest deleteProduct,CancellationToken cancellationToken = default)
+    public async Task<IActionResult> DeleteProduct(DeleteProductRequest deleteProduct, CancellationToken cancellationToken = default)
     {
         await _adminService.DeleteProductAsync(deleteProduct.Id, cancellationToken);
 
@@ -90,7 +91,7 @@ public class AdminController : ControllerBase
 
     [Route("create-vaucer")]
     [HttpPost]
-    public async Task<IActionResult> CreateVaucer(VaucerRequest vaucerRequest,CancellationToken cancellationToken=default)
+    public async Task<IActionResult> CreateVaucer(VaucerRequest vaucerRequest, CancellationToken cancellationToken = default)
     {
         if (vaucerRequest is null)
             return BadRequest();
@@ -102,7 +103,7 @@ public class AdminController : ControllerBase
 
     [Route("get-vaucer")]
     [HttpGet]
-    public async Task<IActionResult> GetVaucers(CancellationToken cancellationToken=default)
+    public async Task<IActionResult> GetVaucers(CancellationToken cancellationToken = default)
     {
         var vaucers = await _adminService.GetVaucersAsync(cancellationToken);
 
@@ -112,7 +113,7 @@ public class AdminController : ControllerBase
 
     [Route("delete-vaucer")]
     [HttpPost]
-    public async Task<IActionResult> DeleteVaucer(DeleteVaucerRequest deleteVaucer,CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteVaucer(DeleteVaucerRequest deleteVaucer, CancellationToken cancellationToken)
     {
         await _adminService.DeleteVaucerAsync(deleteVaucer.Id, cancellationToken);
 

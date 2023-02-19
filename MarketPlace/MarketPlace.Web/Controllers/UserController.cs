@@ -66,4 +66,13 @@ public class UserController : ControllerBase
 
 		return Ok(result);
 	}
+
+    [Route("get-vaucer-by-productId")]
+    [HttpGet]
+    public async Task<IActionResult> GetVaucerByProductId(int id, CancellationToken cancellationToken)
+    {
+        var vaucers = await _vaucerService.GetVaucerByProductIdAsync(id, cancellationToken);
+
+        return Ok(vaucers);
+    }
 }
