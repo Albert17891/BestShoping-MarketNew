@@ -42,6 +42,18 @@ public class AccountController : ControllerBase
         return Ok(response);
     }
 
+    //[Route("login-oauth")]
+    //[HttpGet]
+    //public  IActionResult LoginByGithub()
+    //{
+    //    return Challenge(
+    //        new AuthenticationProperties()
+    //        {
+    //            RedirectUri = "https://localhost:7246/Admin/GetUsers"
+    //        },
+    //        authenticationSchemes:new List<string>() { "github" }[0] ) ;
+    //}
+
     [Route("register")]
     [HttpPost]
     public async Task<IActionResult> Register(RegisterRequest registerRequest)

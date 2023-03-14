@@ -48,6 +48,7 @@ public class ProductController : ControllerBase
         var query = new GetMyProductQuery(user.Id);
 
         var result = await _mediator.Send(query, cancellationToken);
+
         return Ok(result);
     }
 

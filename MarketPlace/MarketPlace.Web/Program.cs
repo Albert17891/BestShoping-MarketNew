@@ -1,12 +1,10 @@
 using FluentValidation.AspNetCore;
-using MarketPlace.Core.Entities;
+using MarketPlace.Core.Behaviors;
 using MarketPlace.Core.Handlers.QueryHandlers;
 using MarketPlace.Infastructure;
-using MarketPlace.Infastructure.Data;
 using MarketPlace.Web.Infastructure.Middleware;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
@@ -15,10 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var configuration = builder.Configuration;
 
 
 builder.Host.UseSerilog();
+
+var configuration = builder.Configuration;
+
 
 var logConfiguration = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")
@@ -36,7 +36,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAppServices(configuration);
 
-builder.Services.AddMediatR(typeof(GetProductsHandler).Assembly);
+builder.Services.AddMediatR(typeof(GetProductsHandler).Assembly)
+                .AddScoped(typeof(IPipelineBehavior<,>),typeof(LoggingPipelineBehavior<,>));
 
 builder.Services.AddFluentValidation(conf =>
 {
@@ -64,6 +65,24 @@ builder.Services.AddAuthentication(options =>
                    ValidateIssuerSigningKey = true
                };
            });
+//}).AddCookie("cookie")
+//.AddOAuth("github", o =>
+//{
+//    o.SignInScheme = "cookie";
+//    o.ClientId = "ef48f886f6510bea43a3";
+//    o.ClientSecret = "9e0d022c58e8bb6299ce77d9ec1d746c084ba13c";
+
+//    o.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
+//    o.TokenEndpoint = "https://github.com/login/oauth/access_token";
+
+//    o.CallbackPath = "/oauth/github-cp";
+
+//    o.SaveTokens = true;
+
+//    o.UserInformationEndpoint = "https://api.github.com.user";
+
+
+//});
 
 builder.Services.AddCors(opt =>
 {
@@ -87,6 +106,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<GlobalExceptionHandler>();
+app.UseMiddleware<LoggingMiddleware>();
+
+app.UseSerilogRequestLogging();
 
 app.UseCors();
 
